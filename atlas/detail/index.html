@@ -95,9 +95,10 @@
       <pre id="protein-sequence" class="sequence-viewer"></pre>
     </div>
 
+<script src="/static/js/static-data.js"></script>
 <script>
-  const ATLAS_API_BASE = "/api/data/v1";
-  const ATLAS_ACCESSION = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "P18583");
+  const detailParams = new URLSearchParams(window.location.search);
+  const ATLAS_ACCESSION = detailParams.get("id") || decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "P18583");
   document.getElementById("atlas-accession-title").textContent = ATLAS_ACCESSION;
 
   function formatSequence(seq, positions) {
@@ -309,17 +310,17 @@
   }
 
   async function loadAtlasDetail() {
-    const response = await fetch(`${ATLAS_API_BASE}/atlas/detail/${encodeURIComponent(ATLAS_ACCESSION)}`);
-    if (!response.ok) {
+    const payload = await window.OglcnacStaticData.getAtlasDetail(ATLAS_ACCESSION);
+    if (!payload.records.length) {
       document.getElementById("protein-sequence").textContent = "Atlas record is not available.";
       ["detail1", "detail2", "detail3"].forEach(startDetailTable);
       return;
     }
-    const payload = await response.json();
-    if (!payload.uniprot_fasta || ["NA", "N/A"].includes(payload.uniprot_fasta.trim().toUpperCase())) {
+    const fasta = await window.OglcnacStaticData.getCachedUniprotFasta(ATLAS_ACCESSION);
+    if (!fasta || ["NA", "N/A"].includes(fasta.trim().toUpperCase())) {
       document.getElementById("protein-sequence").textContent = "Protein sequence for this entry is not available in UniProt. Please refer to the original paper for details.";
     } else {
-      document.getElementById("protein-sequence").innerHTML = formatSequence(payload.uniprot_fasta, payload.positions || []);
+      document.getElementById("protein-sequence").innerHTML = formatSequence(fasta, payload.positions || []);
     }
 
     payload.records.forEach((record) => {

@@ -119,15 +119,15 @@
 
     
 
+<script src="/static/js/static-data.js"></script>
 <script>
-const ATLAS_BROWSE_API_BASE = "/api/data/v1";
 let selectedBrowseSpecies = "Human";
 let browseTable = null;
 
 function atlasBrowseRow(record) {
   const accession = record.accession || "";
   return [
-    accession ? `<a href="/atlas/detail/${encodeURIComponent(accession)}"><strong>${accession}</strong></a>` : "Not available",
+    accession ? `<a href="/atlas/detail/?id=${encodeURIComponent(accession)}"><strong>${accession}</strong></a>` : "Not available",
     record.entry_name || "Not available",
     record.protein_name || "Not available",
     record.gene_name || "Not available",
@@ -160,23 +160,14 @@ function loadBrowse(species) {
       buttons: ['copy', 'csv', 'excel', 'pdf']
     },
     ajax: async function (request, callback) {
-      const params = new URLSearchParams({
-        species: selectedBrowseSpecies,
-        limit: request.length,
-        offset: request.start,
-        q: request.search.value || ""
-      });
       try {
-        const response = await fetch(`${ATLAS_BROWSE_API_BASE}/atlas/browse?${params.toString()}`);
-        if (!response.ok) {
-          throw new Error("Browse request failed");
-        }
-        const payload = await response.json();
+        const results = await window.OglcnacStaticData.browseAtlas(selectedBrowseSpecies, request.search.value || "");
+        const page = results.slice(request.start, request.start + request.length);
         callback({
           draw: request.draw,
-          recordsTotal: payload.total_count,
-          recordsFiltered: payload.count,
-          data: payload.results.map(atlasBrowseRow)
+          recordsTotal: results.length,
+          recordsFiltered: results.length,
+          data: page.map(atlasBrowseRow)
         });
       } catch (error) {
         callback({ draw: request.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });

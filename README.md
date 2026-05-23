@@ -1,20 +1,25 @@
 # O-GlcNAc Static Public Site
 
-Static frontend generated from the Django public pages. Serve this directory as the public web root and route API calls to the FastAPI services.
-
-Expected reverse proxy routes:
-
-```text
-/api/data/ -> http://127.0.0.1:8020/api/
-/api/prediction/ -> http://127.0.0.1:8010/api/
-/atlas/detail/* -> /atlas/detail/index.html
-/ogt-pin/detail/* -> /ogt-pin/detail/index.html
-all other public page paths -> matching index.html files
-```
+Static frontend generated from the Django public pages. This repository is prepared for GitHub Pages at `oglcnac.org`.
 
 Dynamic behavior is browser-side:
 
-- Atlas/OGT-PIN search, browse, and detail pages call `/api/data/v1`.
-- Atlas Browse uses server-side pagination through `/api/data/v1/atlas/browse` so large species datasets are not loaded into the browser in one response.
-- PRED-DL prediction calls `/api/prediction/v1/predict`.
+- Atlas/OGT-PIN search, browse, and detail pages use static JSON bundles in `/static/data/`.
+- Atlas Browse uses client-side pagination over the static bundle.
+- PRED-DL prediction calls `https://api.oglcnac.org/api/v1/predict`, with `/api/prediction/v1/predict` as a transition fallback while the current origin proxy is still in use.
 - Contact pages use mailto links.
+
+## GitHub Pages
+
+This repository is prepared for GitHub Pages:
+
+- `CNAME` points the site to `oglcnac.org`.
+- `.nojekyll` disables Jekyll processing.
+- `404.html` redirects legacy detail paths like `/atlas/detail/P18583` to query-style pages that work on GitHub Pages.
+- PRED-DL tries `https://api.oglcnac.org/api/v1/predict` first and falls back to `/api/prediction/v1/predict` while the current origin proxy is still in use.
+
+Regenerate static data bundles from the service SQLite database:
+
+```bash
+python3 scripts/generate_static_data.py
+```

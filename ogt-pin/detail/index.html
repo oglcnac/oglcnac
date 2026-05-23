@@ -137,9 +137,10 @@
     
 
     
+    <script src="/static/js/static-data.js"></script>
     <script>
-        const INTERACTOME_API_BASE = "/api/data/v1";
-        const INTERACTOME_UUID_B = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "Q9H1M0");
+        const detailParams = new URLSearchParams(window.location.search);
+        const INTERACTOME_UUID_B = detailParams.get("id") || decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "Q9H1M0");
         document.getElementById("interactome-title").textContent = INTERACTOME_UUID_B;
 
         function textCell(row, value) {
@@ -174,12 +175,11 @@
         }
 
         async function loadInteractomeDetail() {
-            const response = await fetch(`${INTERACTOME_API_BASE}/ogt-pin/detail/${encodeURIComponent(INTERACTOME_UUID_B)}`);
-            if (!response.ok) {
+            const payload = await window.OglcnacStaticData.getOgtPinDetail(INTERACTOME_UUID_B);
+            if (!payload.records.length) {
                 startInteractomeDetailTable();
                 return;
             }
-            const payload = await response.json();
             const body = document.getElementById("interactome-detail-rows");
             payload.records.forEach((record) => {
                 const row = body.insertRow();

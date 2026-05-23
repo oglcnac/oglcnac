@@ -171,8 +171,8 @@
     
 
     
+  <script src="/static/js/static-data.js"></script>
   <script>
-    const ATLAS_API_BASE = "/api/data/v1";
 
     function textCell(row, value) {
       const cell = row.insertCell();
@@ -227,16 +227,11 @@
         startAtlasTable();
         return;
       }
-      const url = `${ATLAS_API_BASE}/atlas/search?q=${encodeURIComponent(term)}&field=${encodeURIComponent(field)}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("Atlas search request failed");
-      }
-      const payload = await response.json();
+      const results = await window.OglcnacStaticData.searchAtlas(term, field);
       const body = document.getElementById("atlas-search-results");
-      payload.results.forEach((record) => {
+      results.forEach((record) => {
         const row = body.insertRow();
-        linkCell(row, `/atlas/detail/${encodeURIComponent(record.accession)}`, record.accession, true);
+        linkCell(row, `/atlas/detail/?id=${encodeURIComponent(record.accession)}`, record.accession, true);
         textCell(row, record.entry_name);
         textCell(row, record.protein_name);
         textCell(row, record.gene_name);

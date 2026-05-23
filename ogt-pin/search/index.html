@@ -145,8 +145,8 @@
     
 
     
+  <script src="/static/js/static-data.js"></script>
   <script>
-    const INTERACTOME_API_BASE = "/api/data/v1";
 
     function textCell(row, value) {
       const cell = row.insertCell();
@@ -201,14 +201,9 @@
         startInteractomeTable();
         return;
       }
-      const url = `${INTERACTOME_API_BASE}/ogt-pin/search?q=${encodeURIComponent(term)}&field=${encodeURIComponent(field)}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error("OGT-PIN search request failed");
-      }
-      const payload = await response.json();
+      const results = await window.OglcnacStaticData.searchOgtPin(term, field);
       const body = document.getElementById("interactome-search-results");
-      payload.results.forEach((record) => {
+      results.forEach((record) => {
         const row = body.insertRow();
         textCell(row, record.uuid_a);
         textCell(row, record.gene_name_a);
@@ -220,7 +215,7 @@
         uniprot.textContent = "UniProt ";
         idCell.appendChild(uniprot);
         const detail = document.createElement("a");
-        detail.href = `/ogt-pin/detail/${encodeURIComponent(record.uuid_b)}`;
+        detail.href = `/ogt-pin/detail/?id=${encodeURIComponent(record.uuid_b)}`;
         const strong = document.createElement("strong");
         strong.textContent = record.uuid_b || "";
         detail.appendChild(strong);
