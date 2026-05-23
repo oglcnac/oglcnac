@@ -29,8 +29,8 @@ def main():
     parser = argparse.ArgumentParser(description="Generate static Atlas and OGT-PIN data bundles.")
     parser.add_argument(
         "--database",
-        default="/home/bach/oglcnac-data-service/data/oglcnac_data.sqlite3",
-        help="Path to the service SQLite database.",
+        default="/home/bach/O-GlcNAcDB1/db.sqlite3",
+        help="Path to the source SQLite database.",
     )
     parser.add_argument(
         "--output-dir",
