@@ -1,7 +1,22 @@
 # O-GlcNAc Static Frontend
 
-This directory is the editable source for the public static website at `https://oglcnac.org/`.
+This directory is the generated public static website at `https://oglcnac.org/`.
 It is deployed by copying this directory to `/home/bach/oglcnac-static-site` and pushing that deploy checkout to GitHub Pages.
+
+Public HTML and `static/css/app.css` are generated and tracked. Edit the
+dependency-free sources in `../site/`, then rebuild and verify drift:
+
+```bash
+npm run build:site
+npm run check:site
+npm run test:site
+npm run qa:repository
+```
+
+The deploy helper runs `check:site` before copying files and refuses stale
+generated output. `npm run qa:runtime` is the strict external-runtime gate; it
+will remain red until the legacy table runtime is removed in the native table
+migration.
 
 Dynamic behavior is browser-side:
 
@@ -14,6 +29,15 @@ Dynamic behavior is browser-side:
 - Submitted protein sequences remain in the browser; there is no automatic API
   fallback.
 - Contact pages use mailto links.
+
+Native-table CSV downloads contain the complete filtered result and use RFC
+4180 CRLF record separators, including normalized embedded line breaks.
+Clipboard output contains only the visible page and remains tab-delimited.
+
+The repository asset audit resolves root-relative and document-relative HTML
+references, query/fragment suffixes, `srcset`, CSS URLs, JavaScript static
+references, and runtime directory roots. See `../docs/REBUILD.md` for the
+source/generated ownership boundary.
 
 ## GitHub Pages
 
