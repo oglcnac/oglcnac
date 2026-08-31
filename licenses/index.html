@@ -4,14 +4,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Resource Not Found | oglcnac.org</title>
-  <meta name="description" content="The requested oglcnac.org resource could not be found.">
-  <link rel="canonical" href="https://oglcnac.org/404/">
-  <meta name="robots" content="noindex">
+  <title>Licenses and Privacy | oglcnac.org</title>
+  <meta name="description" content="Licenses, third-party notices, privacy, and usage terms for oglcnac.org.">
+  <link rel="canonical" href="https://oglcnac.org/licenses/">
+
   <link rel="stylesheet" href="/static/css/app.css?v=20260830-workbench1">
 
 </head>
-<body class="site-body section-body not-found-body">
+<body class="site-body section-body">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header">
   <div class="site-header-inner">
@@ -44,33 +44,19 @@
   })();
 </script>
 
-<main id="main-content" class="site-main"><section class="page-hero page-hero-compact">
-  <div class="container page-hero-inner">
-    <p class="eyebrow">404 error</p>
-    <h1>Resource not found</h1>
-    <p class="page-lead">
-      The requested page is not available. The research tools and datasets
-      remain accessible from the links below.
-    </p>
-    <div class="button-row">
-      <a class="button button-primary" href="/">Return to oglcnac.org</a>
-      <a class="button button-secondary" href="/atlas/search/">Search Atlas</a>
-    </div>
-  </div>
-</section>
-<section class="content-section">
-  <div class="container">
-    <div class="panel">
-      <h2>Continue with a research resource</h2>
-      <div class="resource-links">
-        <a href="/atlas/"><strong>O-GlcNAcAtlas</strong><span>Curated O-GlcNAc sites and proteins</span></a>
-        <a href="/ogt-pin/"><strong>OGT-PIN</strong><span>Experimentally identified OGT interactors</span></a>
-        <a href="/pred_dl/"><strong>O-GlcNAcPRED-DL</strong><span>Browser-based site prediction</span></a>
-        <a href="/hexnac-quest/"><strong>HexNAcQuest</strong><span>Browser-based glycoform analysis</span></a>
-      </div>
-    </div>
-  </div>
-</section></main>
+<main id="main-content" class="site-main"><section class="page-hero page-hero-compact"><div class="container page-hero-inner">
+  <p class="eyebrow">Open research resource</p><h1>Licenses and privacy</h1>
+  <p class="page-lead">Clear reuse terms and private, registration-free browser tools.</p>
+</div></section>
+<section class="content-section"><div class="container"><div class="panel prose">
+  <h2>Reuse</h2>
+  <p>Original source code is released under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a>. Original website content and project datasets are released under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC BY 4.0)</a>, except where a source file or third-party notice states otherwise.</p>
+  <h2>Third-party software and material</h2>
+  <p>TensorFlow.js, Papa Parse, model artifacts, publication figures, and other third-party components retain their respective terms. See <a href="https://github.com/oglcnac/oglcnac-source/blob/master/THIRD-PARTY-NOTICES.md">the third-party inventory</a>.</p>
+  <h2>Privacy</h2>
+  <p>Sequence prediction and HexNAcQuest analysis run in your browser. oglcnac.org does not require registration, advertising cookies, or analytics tracking. Input selected for these tools is not uploaded to oglcnac.org.</p>
+  <p>Some optional links, including DOI, PubMed, UniProt, and GitHub links, open third-party services governed by their own privacy policies.</p>
+</div></div></section></main>
 <footer class="footer site-footer">
   <div class="container footer-inner">
     <div>
@@ -90,16 +76,6 @@
   </div>
 </footer>
 
-<script>
-  (() => {
-    const parts = window.location.pathname.split("/").filter(Boolean);
-    if (parts[0] === "atlas" && parts[1] === "detail" && parts[2]) {
-      window.location.replace(`/atlas/detail/?id=${encodeURIComponent(parts[2])}`);
-    } else if (parts[0] === "ogt-pin" && parts[1] === "detail" && parts[2]) {
-      window.location.replace(`/ogt-pin/detail/?id=${encodeURIComponent(parts[2])}`);
-    }
-  })();
-</script>
 
 </body>
 </html>

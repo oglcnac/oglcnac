@@ -8,8 +8,9 @@
   <meta name="description" content="Review OGT-PIN interaction statistics and publication figures.">
   <link rel="canonical" href="https://oglcnac.org/ogt-pin/statistics/">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=20260805-density1">
-
+  <link rel="stylesheet" href="/static/css/app.css?v=20260830-workbench1">
+  <script defer src="/static/js/static-data.js"></script>
+  <script defer src="/static/js/ogt-network-summary.js"></script>
 </head>
 <body class="site-body section-body interactome-section">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -22,6 +23,7 @@
         <nav class="site-primary-nav" aria-label="Primary navigation">
           <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin" data-section-current="true">OGT-PIN</a></li><li><a href="/pred_dl/">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
         </nav>
+        <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
           <ul><li><a href="/ogt-pin/">OGT-PIN</a></li><li><a href="/ogt-pin/statistics/" aria-current="page">Statistics</a></li><li><a href="/ogt-pin/search/">Search</a></li><li><a href="/ogt-pin/tutorial/">Tutorial</a></li><li><a href="/ogt-pin/contact/">Contact</a></li></ul>
         </nav>
@@ -47,18 +49,30 @@
 
 <main id="main-content" class="site-main"><section class="page-hero page-hero-compact">
   <div class="container page-hero-inner">
-    <p class="eyebrow">Historical publication evidence</p>
+    <p class="eyebrow">Current evidence and publication context</p>
     <h1>OGT-PIN statistics</h1>
     <p class="page-lead">
-      Fixed publication figures covering OGT interaction evidence from 1984
-      through December 31, 2021.
+      Explore a readable summary of the current tracked records, with the
+      original publication figures preserved below.
     </p>
   </div>
 </section>
 
 <section class="content-section">
   <div class="container">
-    <div class="panel ogt-statistics-panel">
+    <div class="panel ogt-network-summary">
+      <div class="ogt-network-heading"><div><p class="eyebrow">Current tracked data</p><h2>Readable OGT interaction overview</h2><p>Filter by species. The network shows up to 12 interactors with the most evidence records; node numbers are evidence-record counts, not interaction strengths.</p></div><label for="ogt-network-species">Species<select id="ogt-network-species"><option>All species</option></select></label></div>
+      <div id="ogt-summary-metrics" class="metric-grid" aria-live="polite"></div>
+      <div class="ogt-network-canvas" aria-label="OGT-centered summary network"><div class="ogt-center-node">OGT</div><div id="ogt-network-nodes"></div></div>
+      <p id="ogt-network-status" class="form-note" role="status">Loading current OGT-PIN data…</p>
+    </div>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="container">
+    <details class="panel historical-figures">
+      <summary><strong>Open original publication figures</strong><span>Fixed evidence snapshots through December 31, 2021</span></summary>
       <div class="evidence-grid ogt-statistics-grid">
         <figure class="evidence-figure">
           <h2>Distribution of 1,095 high-stringency interacting proteins</h2>
@@ -81,7 +95,7 @@
           </figcaption>
         </figure>
       </div>
-    </div>
+    </details>
   </div>
 </section></main>
 <footer class="footer site-footer">
@@ -95,7 +109,10 @@
       <a href="/ogt-pin">OGT-PIN</a>
       <a href="/pred_dl/">PRED-DL</a>
       <a href="/hexnac-quest/">HexNAcQuest</a>
-      <a href="https://junfengmalab.org/">Ma Lab</a>
+      <a href="/analysis/">Workbench</a>
+      <a href="/citations/">Citations</a>
+      <a href="/licenses/">Licenses &amp; privacy</a>
+      <a href="https://junfengmalab.org/">Research group</a>
     </div>
   </div>
 </footer>
