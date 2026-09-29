@@ -7,8 +7,25 @@
   <title>Interaction Record | OGT-PIN</title>
   <meta name="description" content="Inspect curated OGT interaction evidence for a selected protein.">
   <link rel="canonical" href="https://oglcnac.org/ogt-pin/detail/">
+  <link rel="icon" href="/static/img/favicon.svg?v=40f210b3e2ad1444" type="image/svg+xml">
+  <meta name="theme-color" content="#071a27">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oglcnac.org">
+  <meta property="og:title" content="Interaction Record | OGT-PIN">
+  <meta property="og:description" content="Inspect curated OGT interaction evidence for a selected protein.">
+  <meta property="og:url" content="https://oglcnac.org/ogt-pin/detail/">
+  <meta property="og:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="oglcnac.org — integrated O-GlcNAc research resources">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Interaction Record | OGT-PIN">
+  <meta name="twitter:description" content="Inspect curated OGT interaction evidence for a selected protein.">
+  <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
+  <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=20260830-workbench1">
+  <link rel="stylesheet" href="/static/css/app.css?v=91ac55b202c18d6e">
 
 </head>
 <body class="site-body section-body interactome-section">
@@ -20,7 +37,7 @@
       <summary>Menu</summary>
       <div class="site-nav-panel">
         <nav class="site-primary-nav" aria-label="Primary navigation">
-          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin" data-section-current="true">OGT-PIN</a></li><li><a href="/pred_dl/">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
+          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin/" data-section-current="true">OGT-PIN</a></li><li><a href="/pred_dl/">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
         </nav>
         <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
@@ -73,11 +90,11 @@
   <div class="container">
     <div class="detail-hero">
       <p class="section-label">OGT-PIN record</p>
-      <h1 id="interactome-title">Q9H1M0</h1>
+      <h1 id="interactome-title">Find an interaction record</h1>
       <p>Curated OGT interaction evidence for this interactor.</p>
     </div>
 
-    <div class="detail-section">
+    <div class="detail-section" hidden>
       <div class="detail-section-heading">
         <span>Interactome</span>
         <h2>Interaction information</h2>
@@ -122,16 +139,17 @@
   </div>
 </footer>
 
-    <script src="/static/js/static-data.js"></script>
-    <script src="/static/js/table-utils.js"></script>
+    <script src="/static/js/static-data.js?v=297a7913a6243e5d"></script>
+    <script src="/static/js/table-utils.js?v=aa9e2fe19dc40f28"></script>
     <script>
         const detailParams = new URLSearchParams(window.location.search);
-        const INTERACTOME_UUID_B = detailParams.get("id") || decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "Q9H1M0");
-        document.getElementById("interactome-title").textContent = INTERACTOME_UUID_B;
+        const detailPath = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "");
+        const INTERACTOME_UUID_B = (detailParams.get("id") || (!["detail", "index.html"].includes(detailPath) ? detailPath : "")).trim();
+        document.getElementById("interactome-title").textContent = INTERACTOME_UUID_B || "Find an interaction record";
 
         const interactomeDetailTable = window.OglcnacTables.create(
             "interactome",
-            { filename: `${INTERACTOME_UUID_B}-ogt-pin.csv` }
+            { mobileColumns: [0, 2, 3, 8], filename: `${INTERACTOME_UUID_B}-ogt-pin.csv` }
         );
   const interactomeRecordState = document.createElement("p");
   interactomeRecordState.setAttribute("data-record-state", "ogt-pin");
@@ -141,6 +159,18 @@
             interactomeRecordState
         );
 
+        const recovery = document.createElement("div");
+        recovery.className = "record-recovery";
+        const example = document.createElement("a");
+        example.href = "/ogt-pin/detail/?id=Q9H1M0";
+        example.textContent = "Explore example Q9H1M0";
+        const retry = document.createElement("button");
+        retry.type = "button";
+        retry.textContent = "Retry loading record";
+        retry.hidden = true;
+        retry.addEventListener("click", loadInteractomeDetail);
+        recovery.append(example, retry);
+        interactomeRecordState.after(recovery);
         function interactomeDetailRow(record) {
             return [
                 record.uuid_b,
@@ -162,6 +192,13 @@
         }
 
         async function loadInteractomeDetail() {
+            document.querySelector(".interactome-detail-page .detail-section").hidden = true;
+            retry.hidden = true;
+            if (!INTERACTOME_UUID_B) {
+                interactomeRecordState.dataset.state = "initial";
+                interactomeRecordState.textContent = "Search for an interactor above, or open an example to explore the curated interaction evidence.";
+                return;
+            }
             interactomeRecordState.dataset.state = "loading";
             interactomeRecordState.textContent = "Loading interaction record…";
             interactomeDetailTable.setLoading("Loading interaction evidence…");
@@ -176,6 +213,8 @@
                     interactomeDetailTable.setRows([]);
                     return;
                 }
+                document.querySelector(".interactome-detail-page .detail-section").hidden = false;
+                recovery.hidden = true;
                 interactomeDetailTable.setRows(
                     payload.records.map(interactomeDetailRow)
                 );
@@ -183,6 +222,7 @@
                 interactomeRecordState.textContent =
                     `${payload.records.length.toLocaleString()} interaction evidence records loaded.`;
             } catch (error) {
+                retry.hidden = false;
                 interactomeRecordState.dataset.state = "error";
                 interactomeRecordState.textContent =
                     "This OGT-PIN record could not be loaded. Please try again.";

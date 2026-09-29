@@ -7,10 +7,27 @@
   <title>Statistics | OGT-PIN</title>
   <meta name="description" content="Review OGT-PIN interaction statistics and publication figures.">
   <link rel="canonical" href="https://oglcnac.org/ogt-pin/statistics/">
+  <link rel="icon" href="/static/img/favicon.svg?v=40f210b3e2ad1444" type="image/svg+xml">
+  <meta name="theme-color" content="#071a27">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oglcnac.org">
+  <meta property="og:title" content="Statistics | OGT-PIN">
+  <meta property="og:description" content="Review OGT-PIN interaction statistics and publication figures.">
+  <meta property="og:url" content="https://oglcnac.org/ogt-pin/statistics/">
+  <meta property="og:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="oglcnac.org — integrated O-GlcNAc research resources">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Statistics | OGT-PIN">
+  <meta name="twitter:description" content="Review OGT-PIN interaction statistics and publication figures.">
+  <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=20260830-workbench1">
-  <script defer src="/static/js/static-data.js"></script>
-  <script defer src="/static/js/ogt-network-summary.js"></script>
+
+  <link rel="stylesheet" href="/static/css/app.css?v=91ac55b202c18d6e">
+  <script defer src="/static/js/static-data.js?v=297a7913a6243e5d"></script>
+  <script defer src="/static/js/ogt-network-summary.js?v=7067b876e06dfcff"></script>
 </head>
 <body class="site-body section-body interactome-section">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -21,7 +38,7 @@
       <summary>Menu</summary>
       <div class="site-nav-panel">
         <nav class="site-primary-nav" aria-label="Primary navigation">
-          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin" data-section-current="true">OGT-PIN</a></li><li><a href="/pred_dl/">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
+          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin/" data-section-current="true">OGT-PIN</a></li><li><a href="/pred_dl/">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
         </nav>
         <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
@@ -76,28 +93,40 @@
       <div class="evidence-grid ogt-statistics-grid">
         <figure class="evidence-figure">
           <h2>Distribution of 1,095 high-stringency interacting proteins</h2>
-          <a class="figure-link" href="/static/img/interactome-figure1.svg" target="_blank" rel="noopener" aria-label="Open the interacting-protein distribution figure at full resolution">
-            <img src="/static/img/interactome-figure1.svg" alt="Publication figure showing the species distribution of 1,095 high-stringency interacting proteins of OGT and its orthologues">
+          <a class="figure-link" href="/static/img/interactome-figure1.svg?v=77df672b016e3d92" target="_blank" rel="noopener" aria-label="Open the interacting-protein distribution figure at full resolution">
+            <img data-deferred-src="/static/img/interactome-figure1.svg?v=77df672b016e3d92" alt="Publication figure showing the species distribution of 1,095 high-stringency interacting proteins of OGT and its orthologues">
           </a>
           <figcaption>
             Distribution figure preserved unchanged from the OGT-PIN
             publication materials.
-          </figcaption>
+          <a class="figure-full-size" href="/static/img/interactome-figure1.svg?v=77df672b016e3d92" target="_blank" rel="noopener">Open full-size figure</a></figcaption>
         </figure>
         <figure class="evidence-figure network-figure">
           <h2>A human OGT interaction network</h2>
-          <a class="figure-link" href="/static/img/OGT-Interactome-760.svg" target="_blank" rel="noopener" aria-label="Open the human OGT interaction network at full resolution">
-            <img src="/static/img/OGT-Interactome-760.svg" alt="Publication network figure showing experimentally identified human OGT interaction proteins">
+          <a class="figure-link" href="/static/img/OGT-Interactome-760.svg?v=6602ab1e8f2cf906" target="_blank" rel="noopener" aria-label="Open the human OGT interaction network at full resolution">
+            <img data-deferred-src="/static/img/OGT-Interactome-760.svg?v=6602ab1e8f2cf906" alt="Publication network figure showing experimentally identified human OGT interaction proteins" width="793.27997" height="759.99999">
           </a>
           <figcaption>
             Human OGT interaction network preserved unchanged as an
             evidence-bearing publication figure.
-          </figcaption>
+          <a class="figure-full-size" href="/static/img/OGT-Interactome-760.svg?v=6602ab1e8f2cf906" target="_blank" rel="noopener">Open full-size figure</a></figcaption>
         </figure>
       </div>
     </details>
   </div>
-</section></main>
+</section>
+
+<script>
+  document.querySelectorAll(".historical-figures").forEach((details) => {
+    details.addEventListener("toggle", () => {
+      if (!details.open) return;
+      details.querySelectorAll("img[data-deferred-src]").forEach((img) => {
+        img.src = img.dataset.deferredSrc;
+        delete img.dataset.deferredSrc;
+      });
+    });
+  });
+</script></main>
 <footer class="footer site-footer">
   <div class="container footer-inner">
     <div>

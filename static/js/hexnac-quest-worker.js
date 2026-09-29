@@ -1,8 +1,8 @@
 "use strict";
 
 importScripts(
-  "/static/hexnac-quest/vendor/papaparse.min.js",
-  "/static/js/hexnac-quest-core.js",
+  "/static/hexnac-quest/vendor/papaparse.min.js?v=ac889c7a0c70f5bd",
+  "/static/js/hexnac-quest-core.js?v=a6b930f07f40ac10",
 );
 
 let manifestPromise;
@@ -11,7 +11,7 @@ let activeRun = 0;
 
 function getManifest() {
   if (!manifestPromise) {
-    manifestPromise = fetch("/static/hexnac-quest/v1/model.json").then(
+    manifestPromise = fetch("/static/hexnac-quest/v1/model.json?v=5e77f74c62adb3e4").then(
       (response) => {
         if (!response.ok) throw new Error("The HexNAcQuest model could not be loaded.");
         return response.json();

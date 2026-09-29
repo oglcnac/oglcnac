@@ -7,11 +7,28 @@
   <title>Analysis | HexNAcQuest</title>
   <meta name="description" content="Classify compatible oxonium-ion intensity data as GlcNAc or GalNAc.">
   <link rel="canonical" href="https://oglcnac.org/hexnac-quest/analysis/">
+  <link rel="icon" href="/static/img/favicon.svg?v=40f210b3e2ad1444" type="image/svg+xml">
+  <meta name="theme-color" content="#071a27">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oglcnac.org">
+  <meta property="og:title" content="Analysis | HexNAcQuest">
+  <meta property="og:description" content="Classify compatible oxonium-ion intensity data as GlcNAc or GalNAc.">
+  <meta property="og:url" content="https://oglcnac.org/hexnac-quest/analysis/">
+  <meta property="og:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="oglcnac.org — integrated O-GlcNAc research resources">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Analysis | HexNAcQuest">
+  <meta name="twitter:description" content="Classify compatible oxonium-ion intensity data as GlcNAc or GalNAc.">
+  <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=20260830-workbench1">
-  <script defer src="/static/hexnac-quest/vendor/papaparse.min.js"></script>
-  <script defer src="/static/js/hexnac-quest-core.js"></script>
-  <script defer src="/static/js/hexnac-quest-ui.js"></script>
+
+  <link rel="stylesheet" href="/static/css/app.css?v=91ac55b202c18d6e">
+  <script defer src="/static/hexnac-quest/vendor/papaparse.min.js?v=ac889c7a0c70f5bd"></script>
+  <script defer src="/static/js/hexnac-quest-core.js?v=a6b930f07f40ac10"></script>
+  <script defer src="/static/js/hexnac-quest-ui.js?v=02e9b0ffc184f854"></script>
 </head>
 <body class="site-body section-body hexnac-section">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -22,7 +39,7 @@
       <summary>Menu</summary>
       <div class="site-nav-panel">
         <nav class="site-primary-nav" aria-label="Primary navigation">
-          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin">OGT-PIN</a></li><li><a href="/pred_dl/">PRED-DL</a></li><li><a href="/hexnac-quest/" data-section-current="true">HexNAcQuest</a></li></ul>
+          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin/">OGT-PIN</a></li><li><a href="/pred_dl/">PRED-DL</a></li><li><a href="/hexnac-quest/" data-section-current="true">HexNAcQuest</a></li></ul>
         </nav>
         <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
@@ -49,21 +66,20 @@
 </script>
 
 <main id="main-content" class="site-main">
-    <header class="hq-page-heading">
+    <header class="hq-page-heading hq-analysis-heading">
       <div class="hq-container">
-        <p class="hq-kicker">Oxonium-ion classification</p>
         <h1>Analyze oxonium-ion intensities</h1>
         <p>Select one CSV with the columns <code>id,f126,f138,f144,f168,f186</code>. Headers may be reordered and extra columns are ignored.</p>
       </div>
     </header>
 
-    <section class="hq-section">
+    <section class="hq-section hq-input-section">
       <div class="hq-container">
         <div class="hq-card hq-upload-card">
           <div>
             <label class="hq-file-label" for="hexnac-file">Input CSV</label>
-            <input id="hexnac-file" type="file" accept=".csv,text/csv">
-            <p class="hq-help">Maximum 25 MB and 250,000 data rows. <a href="/static/hexnac-quest/example_input_data.csv" download>Download the canonical example CSV.</a></p>
+            <input id="hexnac-file" type="file" accept=".csv,text/csv" aria-describedby="hexnac-file-help">
+            <p class="hq-help" id="hexnac-file-help">Maximum 25 MB and 250,000 data rows. <a href="/static/hexnac-quest/example_input_data.csv?v=49af13c31d1561e2" download>Download example CSV</a> · <a href="/hexnac-quest/tutorial/">Input guide</a></p>
           </div>
           <div class="hq-actions">
             <button id="hexnac-run" class="hq-button hq-button-primary" type="button" disabled>Run prediction</button>
@@ -73,7 +89,7 @@
           <div id="hexnac-status" class="hq-status" role="status" aria-live="polite" data-state="idle"></div>
           <progress id="hexnac-progress" max="1" value="0" aria-label="Prediction progress"></progress>
           <span id="hexnac-progress-text" class="hq-help"></span>
-          <p class="hq-privacy-note"><strong>Private by design:</strong> your selected CSV stays on your device throughout the analysis.</p>
+          <p class="hq-privacy-note">Your CSV stays on your device throughout the analysis.</p>
         </div>
       </div>
     </section>
@@ -89,6 +105,7 @@
         <div class="hq-card">
           <h2>Prediction results</h2>
           <div class="hq-table-wrap table-scroll" tabindex="0" role="region" aria-label="HexNAcQuest prediction results">
+            <p class="hq-scroll-note">Scroll horizontally to view all intensity columns.</p>
             <table class="hq-table"><thead><tr><th>pred_outcome</th><th>id</th><th>f126</th><th>f138</th><th>f144</th><th>f168</th><th>f186</th></tr></thead><tbody id="hexnac-results-body"></tbody></table>
           </div>
           <div id="hexnac-results-pager" class="hq-pager"></div>
@@ -100,8 +117,9 @@
       <div class="hq-container hq-grid-2 hq-analysis-grid">
         <div class="hq-card">
           <h2>Valid-row preview</h2>
-          <p class="hq-help">Select a row to update the spectrum chart. The preview is capped at the first 500 valid rows; all valid rows are still predicted.</p>
+          <p class="hq-help">Select a row to inspect its five intensities. Preview shows the first 500 valid rows; prediction includes all valid rows.</p>
           <div class="hq-table-wrap table-scroll" tabindex="0" role="region" aria-label="Valid HexNAcQuest input rows">
+            <p class="hq-scroll-note">Scroll horizontally to view all intensity columns.</p>
             <table class="hq-table">
               <thead><tr><th>id</th><th>f126</th><th>f138</th><th>f144</th><th>f168</th><th>f186</th></tr></thead>
               <tbody id="hexnac-preview-body"></tbody>
@@ -109,9 +127,16 @@
           </div>
           <div id="hexnac-preview-pager" class="hq-pager"></div>
         </div>
-        <div class="hq-card">
-          <h2>Selected-row intensities</h2>
-          <svg id="hexnac-spectrum" role="img"></svg>
+        <div class="hq-card hq-spectrum-card">
+          <h2>Selected spectrum</h2>
+          <p class="hq-selected-row" id="hexnac-selected-row" aria-live="polite"></p>
+          <div class="hq-spectrum-plot">
+            <svg id="hexnac-spectrum" role="img" aria-describedby="hexnac-spectrum-note"></svg>
+            <div class="hq-spectrum-labels" aria-hidden="true"><span>126</span><span>138</span><span>144</span><span>168</span><span>186</span></div>
+            <p class="hq-spectrum-axis">Fragment m/z</p>
+          </div>
+          <p class="hq-help" id="hexnac-spectrum-note">Bar heights are relative to this spectrum’s largest intensity. Original input values:</p>
+          <dl id="hexnac-spectrum-values" class="hq-spectrum-values"></dl>
         </div>
       </div>
     </section>
@@ -122,7 +147,7 @@
           <h2>Skipped rows</h2>
           <p class="hq-help">These rows will not appear in the prediction download.</p>
           <div class="hq-table-wrap table-scroll" tabindex="0" role="region" aria-label="Skipped HexNAcQuest input rows">
-            <table class="hq-table"><thead><tr><th>CSV row</th><th>Reason</th></tr></thead><tbody id="hexnac-skipped-body"></tbody></table>
+            <table class="hq-table hq-skipped-table"><thead><tr><th>CSV row</th><th>Reason</th></tr></thead><tbody id="hexnac-skipped-body"></tbody></table>
           </div>
           <div id="hexnac-skipped-pager" class="hq-pager"></div>
         </div>

@@ -7,8 +7,25 @@
   <title>Prediction | O-GlcNAcPRED-DL</title>
   <meta name="description" content="Submit FASTA sequences for private, browser-based O-GlcNAc site prediction.">
   <link rel="canonical" href="https://oglcnac.org/pred_dl/input_fasta/">
+  <link rel="icon" href="/static/img/favicon.svg?v=40f210b3e2ad1444" type="image/svg+xml">
+  <meta name="theme-color" content="#071a27">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oglcnac.org">
+  <meta property="og:title" content="Prediction | O-GlcNAcPRED-DL">
+  <meta property="og:description" content="Submit FASTA sequences for private, browser-based O-GlcNAc site prediction.">
+  <meta property="og:url" content="https://oglcnac.org/pred_dl/input_fasta/">
+  <meta property="og:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="oglcnac.org — integrated O-GlcNAc research resources">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Prediction | O-GlcNAcPRED-DL">
+  <meta name="twitter:description" content="Submit FASTA sequences for private, browser-based O-GlcNAc site prediction.">
+  <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=20260830-workbench1">
+
+  <link rel="stylesheet" href="/static/css/app.css?v=91ac55b202c18d6e">
 
 </head>
 <body class="site-body section-body prediction-section">
@@ -20,7 +37,7 @@
       <summary>Menu</summary>
       <div class="site-nav-panel">
         <nav class="site-primary-nav" aria-label="Primary navigation">
-          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin">OGT-PIN</a></li><li><a href="/pred_dl/" data-section-current="true">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
+          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin/">OGT-PIN</a></li><li><a href="/pred_dl/" data-section-current="true">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
         </nav>
         <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
@@ -51,20 +68,22 @@
 <section class="prediction-input">
   <div class="container">
     <div class="page-heading">
-      <p class="section-label">O-GlcNAcPRED-DL</p>
-      <h1>Deep-learning <span class="nowrap">O-GlcNAc</span> site prediction</h1>
-      <p>Submit human or mouse protein sequences in FASTA format. Use pasted input for a single sequence, or upload a FASTA file for multiple proteins.</p>
-      <p class="prediction-privacy"><strong>Private by design:</strong> prediction runs in your browser, and your protein sequence is not uploaded.</p>
+      <h1>Predict <span class="nowrap">O-GlcNAc</span> sites</h1>
+      <p>Analyze human or mouse proteins with O-GlcNAcPRED-DL.</p>
+      <p class="prediction-privacy">Private, in-browser analysis.</p>
     </div>
 
 
 
-    <div class="prediction-grid">
+    <div class="analysis-input-choice" role="group" aria-label="Sequence input method">
+      <button type="button" id="prediction-paste-mode" aria-pressed="true" aria-controls="prediction-text-form">Paste FASTA</button>
+      <button type="button" id="prediction-upload-mode" aria-pressed="false" aria-controls="prediction-file-form">Upload file</button>
+    </div>
+    <div class="prediction-grid analysis-input-shell">
       <form class="prediction-card" action="#" method="post" id="prediction-text-form">
 
         <div class="prediction-card-header">
-          <span>Option 1</span>
-          <h2>Paste FASTA sequence</h2>
+          <h2>Protein sequences</h2>
         </div>
 
         <fieldset class="species-control">
@@ -73,22 +92,21 @@
           <label><input type="radio" name="drone" value="mouse"> Mouse</label>
         </fieldset>
 
-        <label for="message">Protein sequence in FASTA format</label>
-        <textarea required id="message" name="short_fasta" rows="14" maxlength="200000" class="form-control md-textarea" spellcheck="false"></textarea>
+        <label for="message">FASTA protein sequences</label>
+        <textarea required id="message" name="short_fasta" rows="6" maxlength="200000" class="form-control md-textarea" spellcheck="false" placeholder=">protein_name&#10;MST..."></textarea>
 
         <div class="example-links">
-          <a href="/static/fasta/individual_protein_human.fasta" target="_blank" rel="noopener">Human example</a>
-          <a href="/static/fasta/individual_protein_mouse.fasta" target="_blank" rel="noopener">Mouse example</a>
+          <a href="/static/fasta/individual_protein_human.fasta?v=1b7fbaf41498a4ea" target="_blank" rel="noopener">Human example</a>
+          <a href="/static/fasta/individual_protein_mouse.fasta?v=23c6205951a8c7cf" target="_blank" rel="noopener">Mouse example</a>
           <a href="/pred_dl/tutorial">Tutorial</a>
         </div>
 
         <button type="submit">Submit for prediction</button>
       </form>
 
-      <form class="prediction-card" method="post" action="#" enctype="multipart/form-data" id="prediction-file-form">
+      <form class="prediction-card" method="post" action="#" enctype="multipart/form-data" id="prediction-file-form" hidden>
 
         <div class="prediction-card-header">
-          <span>Option 2</span>
           <h2>Upload FASTA file</h2>
         </div>
 
@@ -102,8 +120,8 @@
         <input id="fasta-file" class="form-control-file" type="file" required name="inp_sequence.fasta" accept=".fasta,.fa,.faa,.txt">
 
         <div class="example-links">
-          <a href="/static/fasta/multiple_proteins_human.fasta" target="_blank" rel="noopener">Human examples</a>
-          <a href="/static/fasta/multiple_proteins_mouse.fasta" target="_blank" rel="noopener">Mouse examples</a>
+          <a href="/static/fasta/multiple_proteins_human.fasta?v=a413ab50afc8e008" target="_blank" rel="noopener">Human examples</a>
+          <a href="/static/fasta/multiple_proteins_mouse.fasta?v=1cf9e652e43cfb10" target="_blank" rel="noopener">Mouse examples</a>
           <a href="/pred_dl/tutorial">Tutorial</a>
         </div>
 
@@ -121,7 +139,6 @@
     </div>
     <div class="results-card" id="prediction-results-card" style="display:none;">
       <div class="table-card-header">
-        <span>Prediction output</span>
         <h2 id="prediction-results-heading">Predicted O-GlcNAc sites</h2>
       </div>
       <div class="table-scroll" tabindex="0" role="region" aria-labelledby="prediction-results-heading">
@@ -159,9 +176,9 @@
 
 
 
-<script src="/static/js/table-utils.js"></script>
-<script src="/static/js/prediction-core.js?v=20260728-static1"></script>
-<script src="/static/js/prediction-ui.js?v=20260805-density1"></script>
+<script src="/static/js/table-utils.js?v=aa9e2fe19dc40f28"></script>
+<script src="/static/js/prediction-core.js?v=3023b34f6ca34c7a"></script>
+<script src="/static/js/prediction-ui.js?v=ccf3342fc0456b90"></script>
 
 </body>
 </html>

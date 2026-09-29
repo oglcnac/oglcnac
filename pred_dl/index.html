@@ -7,8 +7,25 @@
   <title>O-GlcNAcPRED-DL | oglcnac.org</title>
   <meta name="description" content="Predict protein O-GlcNAcylation sites with the browser-based O-GlcNAcPRED-DL ensemble model.">
   <link rel="canonical" href="https://oglcnac.org/pred_dl/">
+  <link rel="icon" href="/static/img/favicon.svg?v=40f210b3e2ad1444" type="image/svg+xml">
+  <meta name="theme-color" content="#071a27">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="oglcnac.org">
+  <meta property="og:title" content="O-GlcNAcPRED-DL | oglcnac.org">
+  <meta property="og:description" content="Predict protein O-GlcNAcylation sites with the browser-based O-GlcNAcPRED-DL ensemble model.">
+  <meta property="og:url" content="https://oglcnac.org/pred_dl/">
+  <meta property="og:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="oglcnac.org — integrated O-GlcNAc research resources">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="O-GlcNAcPRED-DL | oglcnac.org">
+  <meta name="twitter:description" content="Predict protein O-GlcNAcylation sites with the browser-based O-GlcNAcPRED-DL ensemble model.">
+  <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=20260830-workbench1">
+
+  <link rel="stylesheet" href="/static/css/app.css?v=91ac55b202c18d6e">
 
 </head>
 <body class="site-body section-body prediction-section">
@@ -20,7 +37,7 @@
       <summary>Menu</summary>
       <div class="site-nav-panel">
         <nav class="site-primary-nav" aria-label="Primary navigation">
-          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin">OGT-PIN</a></li><li><a href="/pred_dl/" aria-current="page" data-section-current="true">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
+          <ul><li><a href="/">Home</a></li><li><a href="/atlas/">Atlas</a></li><li><a href="/ogt-pin/">OGT-PIN</a></li><li><a href="/pred_dl/" aria-current="page" data-section-current="true">PRED-DL</a></li><li><a href="/hexnac-quest/">HexNAcQuest</a></li></ul>
         </nav>
         <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
@@ -60,7 +77,7 @@
         <a class="button button-secondary" href="/pred_dl/tutorial/">Read the tutorial</a>
       </div>
     </div>
-    <img class="resource-art" src="/static/img/tool-pred-dl.svg" alt="Protein sequence passing through a neural network to site scores for O-GlcNAcPRED-DL">
+    <img class="resource-art" src="/static/img/tool-pred-dl.svg?v=2314b96ab4efa2cd" alt="Protein sequence passing through a neural network to site scores for O-GlcNAcPRED-DL" width="640" height="360">
   </div>
 </section>
 
@@ -102,12 +119,13 @@
       </p>
     </div>
     <figure class="concept-figure">
-      <img src="/static/img/pred-dl-workflow.svg" alt="O-GlcNAcAtlas data are split for training and testing; Word2Vec, one-hot, BLOSUM62, and AAindex features feed CNN-BiLSTM models whose selected outputs vote in O-GlcNAcPRED-DL">
+      <a class="figure-link" href="/static/img/pred-dl-workflow.svg?v=9a88b0b737cc6bc7" target="_blank" rel="noopener"><img src="/static/img/pred-dl-workflow.svg?v=9a88b0b737cc6bc7" alt="O-GlcNAcAtlas data are split for training and testing; Word2Vec, one-hot, BLOSUM62, and AAindex features feed CNN-BiLSTM models whose selected outputs vote in O-GlcNAcPRED-DL" width="1000" height="930"></a>
       <figcaption>
         Model-development workflow preserved from the publication concept:
         Atlas train/test splits, four feature representations, CNN–BiLSTM
         models, model selection, and ensemble voting. The published
         species-specific ensemble now runs in the browser.
+      <a class="figure-full-size" href="/static/img/pred-dl-workflow.svg?v=9a88b0b737cc6bc7" target="_blank" rel="noopener">Open full-size figure</a>
       </figcaption>
     </figure>
   </div>

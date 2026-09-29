@@ -1,7 +1,7 @@
 importScripts(
-  "/static/prediction/vendor/tfjs-2.8.5/tf.min.js",
-  "/static/prediction/vendor/tfjs-2.8.5/tf-backend-wasm.min.js",
-  "/static/js/prediction-core.js",
+  "/static/prediction/vendor/tfjs-2.8.5/tf.min.js?v=e81bac38b67f0d4f",
+  "/static/prediction/vendor/tfjs-2.8.5/tf-backend-wasm.min.js?v=8e834e2285f8e791",
+  "/static/js/prediction-core.js?v=3023b34f6ca34c7a",
 );
 
 const ASSET_ROOT = "/static/prediction/v1/";
