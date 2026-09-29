@@ -25,14 +25,15 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=91ac55b202c18d6e">
+  <link rel="stylesheet" href="/static/css/app.css?v=b1a1198cd55e12b8">
+  <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
 
 </head>
-<body class="site-body section-body interactome-section">
+<body class="site-body section-body interactome-section protein-record-workspace">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header">
   <div class="site-header-inner">
-    <a class="site-brand" href="/">oglcnac.org</a>
+    <a class="site-brand" href="/"><span class="site-brand-mark" aria-hidden="true">O</span><span>oglcnac.org</span></a>
     <details class="site-nav-disclosure" open>
       <summary>Menu</summary>
       <div class="site-nav-panel">
@@ -43,6 +44,20 @@
         <nav class="site-section-nav" aria-label="Section navigation">
           <ul><li><a href="/ogt-pin/">OGT-PIN</a></li><li><a href="/ogt-pin/statistics/">Statistics</a></li><li><a href="/ogt-pin/search/">Search</a></li><li><a href="/ogt-pin/tutorial/">Tutorial</a></li><li><a href="/ogt-pin/contact/">Contact</a></li></ul>
         </nav>
+      </div>
+    </details>
+    <details class="site-search-disclosure" id="site-search">
+      <summary aria-label="Search databases" title="Search databases (/) ">Search <span aria-hidden="true">/</span></summary>
+      <div class="site-search-panel">
+        <form id="site-search-form" action="/atlas/search/" method="get" role="search" aria-label="Search curated databases">
+          <div class="site-search-heading"><strong>Search curated data</strong><button type="button" id="site-search-close" aria-label="Close database search">×</button></div>
+          <div class="site-search-options">
+            <div><label for="site-search-resource">Database</label><select id="site-search-resource"><option value="atlas">O-GlcNAcAtlas</option><option value="ogt-pin">OGT-PIN</option></select></div>
+            <div><label for="site-search-field">Search by</label><select id="site-search-field" name="field"><option value="accession">Accession</option><option value="gene_name">Gene name</option><option value="protein_name">Protein name</option><option value="peptide_seq">Peptide sequence</option><option value="species">Species</option></select></div>
+          </div>
+          <label for="site-search-term">Search term</label><div class="site-search-submit"><input id="site-search-term" name="q" type="search" required autocomplete="off" placeholder="e.g. P18583"><button type="submit">Search</button></div>
+          <p class="site-search-help">Search experimental records. For sequence prediction, <a href="/analysis/">open Workbench</a>.</p>
+        </form>
       </div>
     </details>
   </div>
@@ -65,7 +80,7 @@
 
 <main id="main-content" class="site-main">
 
-<section class="detail-search-strip" aria-label="Search another OGT-PIN record">
+<section class="detail-search-strip atlas-query-bar" aria-label="Search another OGT-PIN record">
   <div class="container">
     <form action="/ogt-pin/search/" method="get" class="search-form">
       <div class="form-field">
@@ -75,10 +90,11 @@
       <div class="form-field">
         <label for="ogt-pin-detail-search-field">Search field</label>
         <select id="ogt-pin-detail-search-field" class="form-control" name="field">
-          <option value="gene_name_b">Gene name for interactor B</option>
-          <option value="uuid_b">Unique identifier for interactor B</option>
-          <option value="gene_name_a">Gene name for interactor A</option>
-          <option value="uuid_a">Unique identifier for interactor A</option>
+          <option value="gene_name_b">Interactor gene</option>
+          <option value="protein_name_b">Interactor protein name</option>
+          <option value="uuid_b">Interactor accession</option>
+          <option value="gene_name_a">Partner gene</option>
+          <option value="uuid_a">Partner accession</option>
           <option value="species">Species</option>
         </select>
       </div>
@@ -87,38 +103,22 @@
   </div>
 </section>
 <section class="detail-page interactome-detail-page">
-  <div class="container">
-    <div class="detail-hero">
-      <p class="section-label">OGT-PIN record</p>
-      <h1 id="interactome-title">Find an interaction record</h1>
-      <p>Curated OGT interaction evidence for this interactor.</p>
-    </div>
-
-    <div class="detail-section" hidden>
-      <div class="detail-section-heading">
-        <span>Interactome</span>
-        <h2>Interaction information</h2>
-      </div>
-      <div class="table-scroll" tabindex="0" role="region" aria-label="OGT-PIN interaction evidence table">
-      <table class="table hover compact detail-table" id="interactome">
-        <thead class="thead-inverse">
-          <tr>
-            <th>Unique identifier for interactor B</th>
-            <th>Alternative identifier for interactor B</th>
-            <th>Interaction detection method</th>
-            <th>PMID</th>
-            <th>Analytic throughput</th>
-            <th>Source</th>
-            <th>Curator comments</th>
-            <th>Meeting IMEx criteria</th>
-            <th>High-stringency interactor</th>
-          </tr>
-        </thead>
-        <tbody id="interactome-detail-rows"></tbody>
-      </table>
-      </div>
-    </div>
+ <div class="container record-layout">
+  <nav class="record-section-nav" aria-label="Record sections"><details><summary>On this record</summary><div class="section-index-links"><a href="#ogt-overview">Overview</a><a href="#ogt-evidence">Interaction evidence</a><a href="#ogt-publications">Publications</a></div></details><p>OGT Protein Interaction Network<br><a href="/ogt-pin/tutorial/">Interpret this record</a></p></nav>
+  <div class="record-main">
+   <header class="detail-hero record-overview" id="ogt-overview">
+    <p class="record-breadcrumb"><a href="/ogt-pin/">OGT-PIN</a><span aria-hidden="true">/</span>Interaction record</p>
+    <h1 id="interactome-title">Find an interaction record</h1>
+    <p class="record-subtitle">Curated interaction evidence with OGT.</p>
+    <dl class="record-identity" id="ogt-identity" hidden><div><dt>Protein</dt><dd id="ogt-protein-name"></dd></div><div><dt>Species</dt><dd id="ogt-species"></dd></div><div><dt>Gene</dt><dd id="ogt-gene-name"></dd></div><div><dt>Partner</dt><dd id="ogt-partner"></dd></div></dl>
+    <div class="record-actions" id="ogt-record-actions" hidden><button type="button" id="ogt-download-record">Download complete record</button><a id="ogt-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#ogt-publications">Source publications</a></div>
+   </header>
+   <section class="detail-section" id="ogt-evidence" hidden><div class="detail-section-heading"><h2>Interaction evidence</h2></div><p class="record-section-note">Evidence retains its detection method, source, and curator annotations. An OGT interaction does not establish a modification site.</p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="OGT-PIN interaction evidence table"><table class="table detail-table" id="interactome"><thead><tr><th>Interactor accession</th><th>Alternative identifier</th><th>Interaction detection method</th><th>PMID</th><th>Analytic throughput</th><th>Source</th><th>Curator comments</th><th>Meeting IMEx criteria</th><th>High-stringency interactor</th></tr></thead><tbody id="interactome-detail-rows"></tbody></table></div>
+   </section>
+   <section class="detail-section record-publications" id="ogt-publications" hidden><div class="detail-section-heading"><h2>Source publications</h2></div><p id="ogt-publication-summary"></p><ul id="ogt-publication-list"></ul><a href="/citations/">How to cite OGT-PIN</a></section>
   </div>
+ </div>
 </section></main>
 <footer class="footer site-footer">
   <div class="container footer-inner">
@@ -139,14 +139,45 @@
   </div>
 </footer>
 
-    <script src="/static/js/static-data.js?v=297a7913a6243e5d"></script>
-    <script src="/static/js/table-utils.js?v=aa9e2fe19dc40f28"></script>
+    <script src="/static/js/static-data.js?v=6dcf02f236f20dd9"></script>
+    <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
+    <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
     <script>
         const detailParams = new URLSearchParams(window.location.search);
         const detailPath = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "");
         const INTERACTOME_UUID_B = (detailParams.get("id") || (!["detail", "index.html"].includes(detailPath) ? detailPath : "")).trim();
         document.getElementById("interactome-title").textContent = INTERACTOME_UUID_B || "Find an interaction record";
 
+        const recordView = window.OglcnacRecordView;
+        let completeRecords = [];
+        document.querySelector('.record-section-nav details').open = matchMedia('(min-width: 901px)').matches;
+        document.getElementById('ogt-download-record').addEventListener('click', () => {
+            const fields = recordView.exportFields(completeRecords);
+            const csv = window.OglcnacTables.rowsToText(fields, completeRecords.map(record => fields.map(field => record[field])), ',');
+            const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+            const link = document.createElement('a'); link.href = url; link.download = `${INTERACTOME_UUID_B}-ogt-pin-complete.csv`;
+            document.body.append(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+        });
+        function fillIdentity(records) {
+            completeRecords = records;
+            const join = field => recordView.values(records, field).join(' / ') || 'Not reported';
+            document.getElementById('ogt-protein-name').textContent = join('protein_name_b');
+            document.getElementById('ogt-gene-name').textContent = join('gene_name_b');
+            document.getElementById('ogt-species').textContent = join('ncbi_id_b');
+            document.getElementById('ogt-partner').textContent = `${join('gene_name_a')} · ${join('uuid_a')}`;
+            document.getElementById('ogt-uniprot-link').href = `https://www.uniprot.org/uniprotkb/${encodeURIComponent(INTERACTOME_UUID_B)}/entry`;
+            document.getElementById('ogt-uniprot-link').hidden = !/^[A-Z0-9]{6,10}(?:-\d+)?$/.test(INTERACTOME_UUID_B);
+            const publications = recordView.publications(records);
+            document.getElementById('ogt-publication-summary').textContent = `${publications.length} distinct source ${publications.length === 1 ? 'publication' : 'publications'} linked from these records.`;
+            const list = document.getElementById('ogt-publication-list'); list.replaceChildren();
+            publications.forEach(pmid => { const item = document.createElement('li'), a = document.createElement('a'); a.href = `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`; a.textContent = `PMID ${pmid}`; item.append(a); list.append(item); });
+        }
+        function showOgtContent(visible) {
+            document.querySelectorAll('.interactome-detail-page .detail-section').forEach(section => { section.hidden = !visible; });
+            document.querySelectorAll('.record-section-nav a[href^="#"]').forEach(link => { link.hidden = !visible && link.hash !== '#ogt-overview'; });
+            document.getElementById('ogt-identity').hidden = !visible;
+            document.getElementById('ogt-record-actions').hidden = !visible;
+        }
         const interactomeDetailTable = window.OglcnacTables.create(
             "interactome",
             { mobileColumns: [0, 2, 3, 8], filename: `${INTERACTOME_UUID_B}-ogt-pin.csv` }
@@ -155,9 +186,7 @@
   interactomeRecordState.setAttribute("data-record-state", "ogt-pin");
   interactomeRecordState.setAttribute("role", "status");
   interactomeRecordState.setAttribute("aria-live", "polite");
-        document.querySelector(".interactome-detail-page .detail-hero").appendChild(
-            interactomeRecordState
-        );
+        document.querySelector(".interactome-detail-page .record-subtitle").after(interactomeRecordState);
 
         const recovery = document.createElement("div");
         recovery.className = "record-recovery";
@@ -192,7 +221,7 @@
         }
 
         async function loadInteractomeDetail() {
-            document.querySelector(".interactome-detail-page .detail-section").hidden = true;
+            showOgtContent(false);
             retry.hidden = true;
             if (!INTERACTOME_UUID_B) {
                 interactomeRecordState.dataset.state = "initial";
@@ -213,7 +242,8 @@
                     interactomeDetailTable.setRows([]);
                     return;
                 }
-                document.querySelector(".interactome-detail-page .detail-section").hidden = false;
+                showOgtContent(true);
+                fillIdentity(payload.records);
                 recovery.hidden = true;
                 interactomeDetailTable.setRows(
                     payload.records.map(interactomeDetailRow)
