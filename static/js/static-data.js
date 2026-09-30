@@ -87,7 +87,7 @@
   }
 
   async function loadAtlasAsset(relative) {
-    const manifest = await loadJson("/static/data/atlas-v2/manifest.json?v=ad2a66c7ca05bd1d");
+    const manifest = await loadJson("/static/data/atlas-v2/manifest.json?v=47dea0f711b0be20");
     return loadJson(`${ATLAS_DELIVERY}${relative}?v=${encodeURIComponent(manifest.revision)}`);
   }
 
@@ -100,7 +100,7 @@
   }
 
   function requestedAccessions(accessions) {
-    return [...new Set((accessions || []).filter((accession) => typeof accession === "string" && accession))];
+    return [...new Set((accessions || []).filter((accession) => typeof accession === "string"))];
   }
 
   async function loadAccessionBuckets(accessions) {
@@ -152,10 +152,17 @@
       const metadata = index.metadata.map((values) => Object.fromEntries(index.fields.map((field, column) => [field, values[column]])));
       PROJECTION_CACHE.set(index, index.metadata_rows.map((metadataRow, row) => {
         if (index.id_deltas) id += index.id_deltas[row];
-        return { ...metadata[metadataRow], id: index.id_deltas ? id : index.ids[row], position_in_protein: index.positions[row] };
+        const context = Object.fromEntries(Object.entries(index.context || {}).map(([field, column]) => [field, column.values[column.rows[row]]]));
+        return { ...metadata[metadataRow], ...context, id: index.id_deltas ? id : index.ids[row], position_in_protein: index.positions[row] };
       }));
     }
     return PROJECTION_CACHE.get(index);
+  }
+
+  async function resolveAtlasAccessions(accessions) {
+    const entries = await loadAtlasAsset("accessions.json");
+    const canonical = new Map(entries.map(value => [value.toUpperCase(), value]));
+    return accessions.map(value => canonical.get(String(value).toUpperCase()) || value);
   }
 
   async function loadAtlasProjection() {
@@ -300,6 +307,8 @@
   }
 
   window.OglcnacStaticData = {
+    loadAtlasProjection,
+    resolveAtlasAccessions,
     loadAtlasRecords,
     loadOgtPinRecords,
     loadAtlasRelease,

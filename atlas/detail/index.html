@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=f2f74a557d2a3b75">
+  <link rel="stylesheet" href="/static/css/app.css?v=52f7982ab34dffc1">
   <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
 
 </head>
@@ -42,7 +42,7 @@
         </nav>
         <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
-          <ul><li><a href="/atlas/">O-GlcNAcAtlas</a></li><li><a href="/atlas/statistics/">Statistics</a></li><li><a href="/atlas/search/">Search</a></li><li><a href="/atlas/browse/">Browse</a></li><li><a href="/atlas/tutorial/">Tutorial</a></li><li><a href="/atlas/download/">Download</a></li><li><a href="/atlas/contact/">Contact</a></li></ul>
+          <ul><li><a href="/atlas/">O-GlcNAcAtlas</a></li><li><a href="/atlas/statistics/">Statistics</a></li><li><a href="/atlas/search/">Search</a></li><li><a href="/atlas/browse/">Browse</a></li><li><a href="/atlas/collections/">Collections</a></li><li><a href="/atlas/tutorial/">Tutorial</a></li><li><a href="/atlas/download/">Download</a></li><li><a href="/atlas/contact/">Contact</a></li></ul>
         </nav>
       </div>
     </details>
@@ -99,7 +99,7 @@
       <div><dt>Gene</dt><dd id="atlas-gene-name"></dd></div><div><dt>Species</dt><dd id="atlas-species"></dd></div>
     </dl>
     <div id="atlas-other-names" hidden></div>
-    <div class="record-actions" id="atlas-record-actions" hidden><button type="button" id="atlas-download-record">Download complete record</button><button type="button" id="atlas-copy-accession">Copy accession</button><a id="atlas-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#atlas-publications">Source publications</a></div>
+    <div class="record-actions" id="atlas-record-actions" hidden><button type="button" id="atlas-download-record">Download complete record</button><button type="button" id="atlas-copy-accession">Copy accession</button><a id="atlas-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#atlas-publications">Source publications</a><details class="atlas-save-disclosure"><summary>Save to collection</summary><div id="atlas-detail-save" class="atlas-save-controls"></div><a href="/atlas/collections/">My collections</a></details></div>
     <p id="atlas-copy-status" class="protein-action-status" role="status" aria-live="polite"></p>
     <dl class="protein-record-metrics" id="atlas-record-metrics" hidden><div><dt>Reported numeric positions</dt><dd id="atlas-position-count"></dd></div><div><dt>Evidence records</dt><dd id="atlas-record-count"></dd></div><div><dt>Source publications</dt><dd id="atlas-publication-count"></dd></div><div><dt>Sequence length</dt><dd id="atlas-length">Loading…</dd></div></dl>
    </header>
@@ -136,12 +136,13 @@
   </div>
  </div>
 </section>
-<script src="/static/js/static-data.js?v=6dcf02f236f20dd9"></script>
+<script src="/static/js/static-data.js?v=d6a7ad56be98b661"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
 <script src="/static/js/protein-viewer.js?v=ca8af6887ecc73c5"></script>
-<script src="/static/js/atlas-evidence.js?v=f8025eec96eecaa4"></script>
-<script src="/static/js/protein-features.js?v=d1bd2c8605dd96f5"></script>
+<script src="/static/js/atlas-evidence.js?v=20ef433c1007c68c"></script>
+<script src="/static/js/protein-features.js?v=10abd27604775286"></script>
+<script src="/static/js/atlas-tools.js?v=00a301f800c4aaa5"></script>
 <script>
   const detailParams = new URLSearchParams(window.location.search);
   const detailPath = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "");
@@ -489,6 +490,8 @@
 
   loadAtlasDetail();
 </script>
+
+<script>OglcnacAtlasTools.mountSave(document.getElementById("atlas-detail-save"),()=>ATLAS_ACCESSION?[ATLAS_ACCESSION]:[]);</script>
 
 </body>
 </html>
