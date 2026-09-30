@@ -307,6 +307,7 @@
   }
 
   window.OglcnacStaticData = {
+    loadAtlasDeliveryManifest: () => loadJson("/static/data/atlas-v2/manifest.json?v=47dea0f711b0be20"),
     loadAtlasProjection,
     resolveAtlasAccessions,
     loadAtlasRecords,

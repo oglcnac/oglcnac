@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=52f7982ab34dffc1">
+  <link rel="stylesheet" href="/static/css/app.css?v=989f97cdec8b5798">
   <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
 
 </head>
@@ -42,7 +42,7 @@
         </nav>
         <a class="site-workbench-link" href="/analysis/">Workbench</a>
         <nav class="site-section-nav" aria-label="Section navigation">
-          <ul><li><a href="/atlas/">O-GlcNAcAtlas</a></li><li><a href="/atlas/statistics/">Statistics</a></li><li><a href="/atlas/search/">Search</a></li><li><a href="/atlas/browse/">Browse</a></li><li><a href="/atlas/collections/">Collections</a></li><li><a href="/atlas/tutorial/">Tutorial</a></li><li><a href="/atlas/download/">Download</a></li><li><a href="/atlas/contact/">Contact</a></li></ul>
+          <ul><li><a href="/atlas/">O-GlcNAcAtlas</a></li><li><a href="/atlas/statistics/">Statistics</a></li><li><a href="/atlas/search/">Search</a></li><li><a href="/atlas/browse/">Browse</a></li><li><a href="/atlas/collections/">Collections</a></li><li><a href="/atlas/publications/">Publications</a></li><li><a href="/atlas/tutorial/">Tutorial</a></li><li><a href="/atlas/download/">Download</a></li><li><a href="/atlas/contact/">Contact</a></li></ul>
         </nav>
       </div>
     </details>
@@ -99,14 +99,14 @@
       <div><dt>Gene</dt><dd id="atlas-gene-name"></dd></div><div><dt>Species</dt><dd id="atlas-species"></dd></div>
     </dl>
     <div id="atlas-other-names" hidden></div>
-    <div class="record-actions" id="atlas-record-actions" hidden><button type="button" id="atlas-download-record">Download complete record</button><button type="button" id="atlas-copy-accession">Copy accession</button><a id="atlas-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#atlas-publications">Source publications</a><details class="atlas-save-disclosure"><summary>Save to collection</summary><div id="atlas-detail-save" class="atlas-save-controls"></div><a href="/atlas/collections/">My collections</a></details></div>
+    <div class="record-actions" id="atlas-record-actions" hidden><button type="button" id="atlas-download-record">Download complete record</button><button type="button" id="atlas-copy-accession">Copy accession</button><a id="atlas-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#atlas-publications">Source publications</a><a id="atlas-analyze" href="/analysis/">Analyze in Workbench</a><button type="button" id="atlas-report">Export research report</button><details class="atlas-save-disclosure"><summary>Save to collection</summary><div id="atlas-detail-save" class="atlas-save-controls"></div><a href="/atlas/collections/">My collections</a></details></div>
     <p id="atlas-copy-status" class="protein-action-status" role="status" aria-live="polite"></p>
     <dl class="protein-record-metrics" id="atlas-record-metrics" hidden><div><dt>Reported numeric positions</dt><dd id="atlas-position-count"></dd></div><div><dt>Evidence records</dt><dd id="atlas-record-count"></dd></div><div><dt>Source publications</dt><dd id="atlas-publication-count"></dd></div><div><dt>Sequence length</dt><dd id="atlas-length">Loading…</dd></div></dl>
    </header>
    <section class="detail-section evidence-filter-panel" id="atlas-filters" hidden></section>
    <section class="detail-section" id="atlas-landscape" hidden>
     <div class="detail-section-heading"><h2>Modification landscape</h2><a href="/atlas/tutorial/#protein-map">About this map</a></div>
-    <div id="atlas-protein-viewer"></div>
+    <div id="atlas-protein-viewer"></div><details id="atlas-figure-export" class="figure-export"></details>
    </section>
    <section class="detail-section" id="atlas-features" hidden>
     <div class="detail-section-heading"><h2>Domains &amp; regions</h2><a href="/atlas/tutorial/#biological-context">About these annotations</a></div>
@@ -136,13 +136,16 @@
   </div>
  </div>
 </section>
-<script src="/static/js/static-data.js?v=d6a7ad56be98b661"></script>
+<script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
-<script src="/static/js/protein-viewer.js?v=ca8af6887ecc73c5"></script>
-<script src="/static/js/atlas-evidence.js?v=20ef433c1007c68c"></script>
-<script src="/static/js/protein-features.js?v=10abd27604775286"></script>
+<script src="/static/js/protein-viewer.js?v=6af07fd26be0d377"></script>
+<script src="/static/js/atlas-evidence.js?v=e198ab17c980c760"></script>
+<script src="/static/js/protein-features.js?v=a709207736011337"></script>
 <script src="/static/js/atlas-tools.js?v=00a301f800c4aaa5"></script>
+<script src="/static/js/research-workflows.js?v=a01bb789d7455578"></script>
+<script src="/static/js/protein-figure.js?v=c395df1fd741850c"></script>
+<script src="/static/js/research-reports.js?v=e4cf275a295ca8e3"></script>
 <script>
   const detailParams = new URLSearchParams(window.location.search);
   const detailPath = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "");
@@ -267,6 +270,14 @@
   document.getElementById('atlas-copy-accession').addEventListener('click', async () => {
     const copied = await window.OglcnacProteinViewer.copyText(ATLAS_ACCESSION);
     document.getElementById('atlas-copy-status').textContent = copied ? `Accession ${ATLAS_ACCESSION} copied.` : `Copy this accession: ${ATLAS_ACCESSION}`;
+  });
+  function atlasResearchContext() {
+    return {accession:ATLAS_ACCESSION,name:atlasCompleteRecords[0]?.protein_name||'',species:atlasView.values(atlasCompleteRecords,'species').join(' / '),sequence:atlasProteinViewer?.getSequence()||'',fasta:atlasFasta,sequence_source:{kind:atlasFasta.startsWith('>local|'+ATLAS_ACCESSION+'|')?'atlas-snapshot':atlasFasta?'uniprot-fallback':'unavailable',label:atlasFasta.startsWith('>local|'+ATLAS_ACCESSION+'|')?'Tracked Atlas sequence':atlasFasta?'UniProt FASTA (live or browser cache)':'No sequence available',header:atlasFasta.split('\n')[0]||''},records:[...(atlasAppliedBase||atlasCompleteRecords)],allRecords:[...atlasCompleteRecords],filteredRecords:[...(atlasAppliedRows||atlasCompleteRecords)],filters:{...(atlasEvidenceController?.getFilters()||{})},position:atlasProteinViewer?.getSelection(),url:location.href,annotation:atlasFeatureViewer?.getExport()||{state:'unavailable',metadata:null}};
+  }
+  OglcnacProteinFigure.mount(document.getElementById('atlas-figure-export'),atlasResearchContext,()=>atlasProteinViewer?.getViewRange()||{start:1,end:0});
+  document.getElementById('atlas-report').addEventListener('click',async()=>{
+    const button=document.getElementById('atlas-report'),status=document.getElementById('atlas-copy-status'),context=atlasResearchContext();button.disabled=true;status.textContent='Preparing a research report with original records, sequence, filters and provenance…';
+    try{const report=await OglcnacResearchReports.protein(context);OglcnacResearch.download(ATLAS_ACCESSION.replace(/[^a-zA-Z0-9_.-]/g,'_')+'-research-report.zip',report);status.textContent='Research report exported. The ZIP contains complete and filtered evidence, available sequence, annotations, citations and checksums.';}catch(error){status.textContent=error.message;}finally{button.disabled=false;}
   });
   document.getElementById('atlas-download-fasta').addEventListener('click', () => atlasProteinViewer?.downloadFasta());
   document.getElementById('atlas-copy-fasta').addEventListener('click', async () => {
@@ -458,6 +469,7 @@
 
     showAtlasContent(true);
     populateAtlasIdentity(payload);
+    document.getElementById("atlas-analyze").href=OglcnacResearch.analysisURL([ATLAS_ACCESSION]);
     atlasFeatureViewer = window.OglcnacProteinFeatures.create(document.getElementById('atlas-feature-viewer'), { accession: ATLAS_ACCESSION });
     atlasEvidenceController = window.OglcnacAtlasEvidence.create(document.getElementById('atlas-filters'), {
       records: payload.records,
