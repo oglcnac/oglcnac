@@ -51,7 +51,7 @@
       select.innerHTML = speciesOptions(records).map((species) => `<option>${escapeHtml(species)}</option>`).join("");
       const update = () => render(summarize(records, select.value, 12));
       select.addEventListener("change", update); update();
-      document.querySelector("#ogt-network-status").textContent = "Current tracked OGT-PIN data loaded.";
+      document.querySelector("#ogt-network-status").textContent = "OGT-PIN interaction records loaded.";
     } catch (error) {
       document.querySelector("#ogt-network-status").textContent = "The current OGT-PIN summary could not be loaded.";
     }

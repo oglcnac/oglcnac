@@ -13,7 +13,7 @@
     if(!active&&data.collections.length)active=data.collections[0].id;
     for(const c of data.collections){const button=T.node('button',`${c.name} · ${c.accessions.length}`,{type:'button','aria-current':String(c.id===active)});button.addEventListener('click',()=>setActive(c.id));list.append(button);}
     const collection=data.collections.find(c=>c.id===active);el('collection-tools').hidden=!collection;el('collection-empty').hidden=!!collection;
-    if(!collection){el('collection-title').textContent=data.collections.length?'Choose a collection':'Your research starts with a few proteins';return;}
+    if(!collection){el('collection-title').textContent=data.collections.length?'Choose a collection':'No saved collections';return;}
     selected.forEach(id=>{if(!collection.accessions.includes(id))selected.delete(id);});selection();el('collection-title').textContent=collection.name;el('collection-name').value=collection.name;el('collection-summary').textContent=`${collection.accessions.length} saved accessions · Updated ${new Date(collection.updated).toLocaleDateString()}`;el('collection-search').href='/atlas/search/?ids='+encodeURIComponent(collection.accessions.join(','));el('collection-search').hidden=!collection.accessions.length;
     table.setLoading('Loading saved proteins…');
     try{const rows=collection.accessions.length?await D.loadAtlasProjection():[];if(generation!==epoch)return;const wanted=new Set(collection.accessions.map(id=>id.toUpperCase())),groups=V.groupProteins(rows.filter(r=>wanted.has(r.accession.toUpperCase()))),byId=new Map();for(const p of groups){const key=p.accession.toUpperCase();if(!byId.has(key))byId.set(key,[]);byId.get(key).push(p);}

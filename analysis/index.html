@@ -91,7 +91,7 @@
       <p class="page-lead">Predict sites and compare Atlas and OGT-PIN evidence. Your sequences stay in your browser.</p></div>
   </div>
 </section>
-<section id="workbench-preparation" class="content-section" hidden><div class="container"><div class="preparation-panel"><div class="detail-section-heading"><h2>Prepare Atlas sequences</h2><a href="/atlas/collections/">My collections</a></div><p>Use exact Atlas sequences with the human or mouse model. Review the preparation outcomes and FASTA before running.</p><p id="preparation-status" role="status"></p><div id="preparation-actions" class="atlas-tool-actions"></div><button type="button" id="preparation-retry" hidden>Retry sequence preparation</button><details class="preparation-outcomes"><summary>All requested proteins and preparation outcomes</summary><div class="table-scroll" tabindex="0" role="region" aria-label="Sequence preparation outcomes"><table id="preparation_table" class="table"><thead><tr><th>Accession</th><th>Species</th><th>Sequence length</th><th>Preparation outcome</th></tr></thead><tbody></tbody></table></div></details></div></div></section>
+<section id="workbench-preparation" class="content-section" hidden><div class="container"><div class="preparation-panel"><div class="detail-section-heading"><h2>Prepare Atlas sequences</h2><a href="/atlas/collections/">My collections</a></div><p>Use exact Atlas sequences with the human or mouse model. Check which sequences were found and review the FASTA input before running the analysis.</p><p id="preparation-status" role="status"></p><div id="preparation-actions" class="atlas-tool-actions"></div><button type="button" id="preparation-retry" hidden>Retry sequence preparation</button><details class="preparation-outcomes"><summary>All requested proteins and preparation outcomes</summary><div class="table-scroll" tabindex="0" role="region" aria-label="Sequence preparation outcomes"><table id="preparation_table" class="table"><thead><tr><th>Accession</th><th>Species</th><th>Sequence length</th><th>Preparation outcome</th></tr></thead><tbody></tbody></table></div></details></div></div></section>
 <script>if(new URLSearchParams(location.search).has("ids"))document.getElementById("workbench-preparation").hidden=false;</script>
 <section class="content-section"><div class="container workbench-shell">
   <form id="workbench-form" class="panel workbench-form">
@@ -107,7 +107,7 @@
     <p class="workbench-caveat">Predictions prioritize experiments; they are not experimental evidence. No composite score is calculated.</p>
     <details><summary>How to interpret prediction and evidence</summary>
       <p>O-GlcNAcPRED-DL 1.0 · human and mouse</p>
-      <ol><li><strong>Prediction</strong> reports the published model score.</li><li><strong>Atlas</strong> reports exact accession, species, residue, and position matches.</li><li><strong>OGT-PIN</strong> reports accession-and-species OGT interaction evidence.</li></ol>
+      <ol><li><strong>Prediction</strong> reports the published model score.</li><li><strong>Atlas</strong> reports exact accession, species, residue, and position matches.</li><li><strong>OGT-PIN</strong> shows OGT interaction evidence for the same accession and species.</li></ol>
       <a href="/citations/">Citations and interpretation context</a>
     </details>
   </aside>

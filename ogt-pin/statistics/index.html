@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="/static/css/app.css?v=ace5383dc73b2d8d">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
   <script defer src="/static/js/static-data.js?v=baa6963a27330284"></script>
-  <script defer src="/static/js/ogt-network-summary.js?v=7067b876e06dfcff"></script>
+  <script defer src="/static/js/ogt-network-summary.js?v=13e0697117a66564"></script>
 </head>
 <body class="site-body section-body interactome-section">
 <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -84,8 +84,7 @@
     <p class="eyebrow">Current evidence and publication context</p>
     <h1>OGT-PIN statistics</h1>
     <p class="page-lead">
-      Explore a readable summary of the current tracked records, with the
-      original publication figures preserved below.
+      Explore interaction evidence by species or consult the figures from the original OGT-PIN publication.
     </p>
   </div>
 </section>
@@ -93,7 +92,7 @@
 <section class="content-section">
   <div class="container">
     <div class="panel ogt-network-summary">
-      <div class="ogt-network-heading"><div><p class="eyebrow">Current tracked data</p><h2>Readable OGT interaction overview</h2><p>Filter by species. The network shows up to 12 interactors with the most evidence records; node numbers are evidence-record counts, not interaction strengths.</p></div><label for="ogt-network-species">Species<select id="ogt-network-species"><option>All species</option></select></label></div>
+      <div class="ogt-network-heading"><div><p class="eyebrow">Current release</p><h2>OGT interaction partners by species</h2><p>The network shows up to 12 partners with the most evidence records for the selected species. The number beside each partner gives its record count.</p></div><label for="ogt-network-species">Species<select id="ogt-network-species"><option>All species</option></select></label></div>
       <div id="ogt-summary-metrics" class="metric-grid" aria-live="polite"></div>
       <div class="ogt-network-canvas" aria-label="OGT-centered summary network"><div class="ogt-center-node">OGT</div><div id="ogt-network-nodes"></div></div>
       <p id="ogt-network-status" class="form-note" role="status">Loading current OGT-PIN data…</p>
@@ -112,18 +111,16 @@
             <img data-deferred-src="/static/img/interactome-figure1.svg?v=77df672b016e3d92" alt="Publication figure showing the species distribution of 1,095 high-stringency interacting proteins of OGT and its orthologues">
           </a>
           <figcaption>
-            Distribution figure preserved unchanged from the OGT-PIN
-            publication materials.
+            Species represented in the original OGT-PIN publication.
           <a class="figure-full-size" href="/static/img/interactome-figure1.svg?v=77df672b016e3d92" target="_blank" rel="noopener">Open full-size figure</a></figcaption>
         </figure>
         <figure class="evidence-figure network-figure">
           <h2>A human OGT interaction network</h2>
           <a class="figure-link" href="/static/img/OGT-Interactome-760.svg?v=6602ab1e8f2cf906" target="_blank" rel="noopener" aria-label="Open the human OGT interaction network at full resolution">
-            <img data-deferred-src="/static/img/OGT-Interactome-760.svg?v=6602ab1e8f2cf906" alt="Publication network figure showing experimentally identified human OGT interaction proteins" width="793.27997" height="759.99999">
+            <img data-deferred-src="/static/img/OGT-Interactome-760.svg?v=6602ab1e8f2cf906" alt="Publication network figure showing experimentally identified interaction partners of human OGT" width="793.27997" height="759.99999">
           </a>
           <figcaption>
-            Human OGT interaction network preserved unchanged as an
-            evidence-bearing publication figure.
+            Human OGT interaction partners in the original publication.
           <a class="figure-full-size" href="/static/img/OGT-Interactome-760.svg?v=6602ab1e8f2cf906" target="_blank" rel="noopener">Open full-size figure</a></figcaption>
         </figure>
       </div>

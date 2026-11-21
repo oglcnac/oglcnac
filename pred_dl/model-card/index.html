@@ -84,9 +84,9 @@
 </div></section>
 <section class="content-section"><div class="container"><article class="panel prose">
   <h2>Model and intended use</h2>
-  <p>The deployed O-GlcNAcPRED-DL 1.0.0 release is the published species-specific ensemble for prioritizing candidate serine and threonine O-GlcNAcylation sites in human or mouse protein sequences. It supports experimental planning; it does not establish modification.</p>
+  <p>O-GlcNAcPRED-DL 1.0.0 uses separate human and mouse models to prioritize serine and threonine residues for experimental follow-up. Confirming O-GlcNAcylation requires experimental evidence.</p>
   <h2>Inputs and outputs</h2>
-  <p>Input is one or more protein sequences in FASTA format with a selected human or mouse model. The browser reports each S/T residue, its one-based position, a model score rounded to three decimals, and the published confidence thresholds: greater than 0.5, 0.95, and 0.99.</p>
+  <p>Choose the human or mouse model and enter one or more protein sequences in FASTA format. The browser reports each S/T residue, its one-based position, a model score rounded to three decimals, and the published confidence thresholds: greater than 0.5, 0.95, and 0.99.</p>
   <h2>Architecture and runtime</h2>
   <p>Five CNN–BiLSTM models combine AAindex and Word2Vec sequence features with published species-specific ensemble weights. TensorFlow.js/WASM inference runs locally in a Web Worker. The tracked manifest identifies every model and feature artifact by SHA-256.</p>
   <h2>Limitations</h2>

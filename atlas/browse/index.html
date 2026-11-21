@@ -5,14 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Browse | O-GlcNAcAtlas</title>
-  <meta name="description" content="Browse curated O-GlcNAcAtlas records by species.">
+  <meta name="description" content="Browse Atlas proteins by species or filter reported sites by residue and experimental evidence.">
   <link rel="canonical" href="https://oglcnac.org/atlas/browse/">
   <link rel="icon" href="/static/img/favicon.svg?v=40f210b3e2ad1444" type="image/svg+xml">
   <meta name="theme-color" content="#071a27">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="oglcnac.org">
   <meta property="og:title" content="Browse | O-GlcNAcAtlas">
-  <meta property="og:description" content="Browse curated O-GlcNAcAtlas records by species.">
+  <meta property="og:description" content="Browse Atlas proteins by species or filter reported sites by residue and experimental evidence.">
   <meta property="og:url" content="https://oglcnac.org/atlas/browse/">
   <meta property="og:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta property="og:image:type" content="image/png">
@@ -21,7 +21,7 @@
   <meta property="og:image:alt" content="oglcnac.org — integrated O-GlcNAc research resources">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Browse | O-GlcNAcAtlas">
-  <meta name="twitter:description" content="Browse curated O-GlcNAcAtlas records by species.">
+  <meta name="twitter:description" content="Browse Atlas proteins by species or filter reported sites by residue and experimental evidence.">
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
@@ -124,8 +124,8 @@
     </div>
     <div class="record-actions"><label>Peptide outcome <select data-outcome><option value="">Any outcome</option></select></label>
       <label>Model confidence <select data-band><option value="">Any confidence</option><option>Very high</option><option>Confident</option><option>Low</option><option>Very low</option><option>Unavailable</option></select></label></div>
-    <p>Option counts apply the other directory filters. The table text search narrows the displayed rows afterward.</p>
-    <p>Site pLDDT describes confidence in local model geometry. Confirmed PDB counts include each structure with the observed residue once. A plus sign marks a lower bound while some candidate entries await checking. A dash means unassessed.</p>
+    <p>The count beside each option shows how many sites match it with your other filters in place. Searching within the table narrows the visible rows only.</p>
+    <p>Site pLDDT describes confidence in local model geometry. Each PDB entry counts once if the structure contains the observed residue. A plus sign means some candidate structures still need review. A dash means the site has not been assessed.</p>
     <p data-context-status role="status"></p>
   </details>
   <p data-protein-scope hidden></p>
