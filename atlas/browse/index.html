@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=21cb8d2166379906">
+  <link rel="stylesheet" href="/static/css/app.css?v=02f1fbd55089abfe">
   <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
 
 </head>
@@ -80,12 +80,13 @@
 
 <main id="main-content" class="site-main"><section class="page-hero page-hero-compact">
   <div class="container page-hero-inner">
-    <p class="eyebrow">O-GlcNAcAtlas 5.0</p>
+    <p class="eyebrow"><span data-atlas-release-name>O-GlcNAcAtlas</span></p>
     <h1>Browse Atlas by species</h1>
     <p class="page-lead">
       Select a species to explore its curated O-GlcNAc protein and site
       records.
     </p>
+    <div class="record-actions" aria-label="Browse view"><button type="button" id="browse-records" aria-pressed="true">Species records</button><button type="button" id="browse-sites" aria-pressed="false">Sites</button></div>
     <div class="species-filter" aria-label="Browse by species">
       <button type="button" data-species="Human">Human</button>
       <button type="button" data-species="mouse">Mouse</button>
@@ -98,7 +99,14 @@
   </div>
 </section>
 
-<section class="table-results-section" aria-labelledby="atlas-browse-results-heading">
+<section id="site-directory" class="content-section" hidden><div class="container">
+  <h2>Browse reported sites</h2>
+  <div class="record-actions"><label>Species <select data-species-filter></select></label><label>Reported residue <select data-residue></select></label>
+    <label><input type="checkbox" data-mut> Mutagenesis reported</label>
+    <label><input type="checkbox" data-clear> Unambiguous assignment</label></div>
+  <p data-status role="status"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Filtered Atlas site directory"><table id="site-directory-table"><thead><tr><th>Accession</th><th>Reported site</th><th>Species</th><th>Matching records</th></tr></thead><tbody></tbody></table></div>
+  </div></section>
+<section id="browse-record-results" class="table-results-section" aria-labelledby="atlas-browse-results-heading">
   <div class="container">
     <div class="table-card-header">
       <span>Species records</span>
@@ -143,6 +151,11 @@
 <script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script>
+  window.OglcnacStaticData.loadAtlasRelease().then(data=>{
+    const label=document.querySelector('[data-atlas-release-name]');
+    if(label && data.release?.name)label.textContent=data.release.name;
+  }).catch(()=>{});
+
 const atlasBrowseTable = window.OglcnacTables.create("search_result", {
   mobileColumns: [0, 2, 3, 4],
       filename: "oglcnac-atlas-browse.csv"
@@ -211,8 +224,10 @@ document.querySelectorAll(".species-filter [data-species]").forEach((button) => 
   button.addEventListener("click", () => loadBrowse(button.dataset.species));
 });
 const atlasBrowseParams = new URLSearchParams(window.location.search);
-loadBrowse(atlasBrowseParams.get("species") || "Human");
+if(atlasBrowseParams.get("view")!=="sites") loadBrowse(atlasBrowseParams.get("species") || "Human");
 </script>
+
+<script src="/static/js/atlas-site-directory.js?v=5e2d1b6e7e14112b"></script>
 
 </body>
 </html>

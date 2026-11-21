@@ -83,7 +83,17 @@
       options.onChange({records:matches,baseRecords:base,filters:{...filters},position:site,site:selection?.site,active});
     }
     let lastPublicationRows,lastPapers,lastMetadataState;
+    if(options.mutagenesisToggle){
+      options.mutagenesisToggle.checked=new URL(browser.location.href).searchParams.get('papers')==='mutagenesis';
+      options.mutagenesisToggle.onchange=()=>{
+        const url=new URL(browser.location.href);
+        if(options.mutagenesisToggle.checked)url.searchParams.set('papers','mutagenesis');else url.searchParams.delete('papers');
+        browser.history.replaceState({},'',url);lastPublicationRows=null;render();
+      };
+    }
     function renderPublications(matches){
+      if(options.mutagenesisToggle?.checked)matches=matches.filter(row=>/mutagenesis/i.test(row.method||''));
+
       if(lastPapers===papers&&lastMetadataState===metadataState&&lastPublicationRows?.length===matches.length&&lastPublicationRows.every((r,i)=>r===matches[i]))return;
       lastPapers=papers;lastMetadataState=metadataState;lastPublicationRows=matches;
       const list=options.publicationList;const focused=browser.document.activeElement;const focusPmid=focused?.closest('.atlas-citation')?.dataset.pmid;const focusAction=focused?.textContent;list.replaceChildren();const identifiers=pmids(matches);
@@ -96,10 +106,12 @@
         const title=browser.document.createElement('h3');const link=browser.document.createElement('a');link.href=`https://pubmed.ncbi.nlm.nih.gov/${pmid}/`;link.textContent=known?paper.title:`PMID ${pmid}`;title.append(link);content.append(title);
         const details=browser.document.createElement('p');details.className='atlas-citation-metadata';details.textContent=known?[authorLabel(paper),paper.journal_short||paper.journal,paper.date].filter(Boolean).join(' · '):metadataState==='loading'?'Loading citation details…':'Citation details are not available in this snapshot.';content.append(details);
         const support=browser.document.createElement('p');support.className='atlas-citation-support';support.textContent=`${rows.length} ${rows.length===1?'record':'records'} · ${positions.size} reported numeric ${positions.size===1?'position':'positions'}`;content.append(support);
+        const descriptions=[...new Set(rows.map(row=>[row.method,row.analytical_throughput].filter(Boolean).join(' · ')||'Not reported'))];
+        const methods=browser.document.createElement('p');methods.className='atlas-citation-metadata';methods.textContent='Reported method and throughput: '+descriptions.join('; ');content.append(methods);
         const identifiersLine=browser.document.createElement('p');identifiersLine.className='atlas-citation-identifiers';identifiersLine.append(browser.document.createTextNode(`PMID ${pmid}`));
         if(known&&/^10\.\d{4,9}\/\S+$/.test(paper.doi||'')){const doi=browser.document.createElement('a');doi.href='https://doi.org/'+encodeURI(paper.doi).replace(/#/g,'%23').replace(/\?/g,'%3F');doi.textContent='DOI: '+paper.doi;identifiersLine.append(browser.document.createTextNode(' · '),doi);}content.append(identifiersLine);
         const actions=browser.document.createElement('div');actions.className='atlas-citation-actions';
-        const evidence=browser.document.createElement('button');evidence.type='button';evidence.textContent='View evidence';evidence.setAttribute('aria-label',`View ${rows.length} evidence records for PMID ${pmid}`);evidence.addEventListener('click',()=>{filters.pmid=pmid;push('atlas-evidence');render();browser.document.getElementById('atlas-evidence').scrollIntoView({block:'start'});browser.document.getElementById('atlas-evidence-heading').focus({preventScroll:true});});
+        const evidence=browser.document.createElement('button');evidence.type='button';evidence.textContent='View evidence';evidence.setAttribute('aria-label',options.mutagenesisToggle?.checked?'View matching evidence for PMID '+pmid:`View ${rows.length} evidence records for PMID ${pmid}`);evidence.addEventListener('click',()=>{filters.pmid=pmid;push('atlas-evidence');render();browser.document.getElementById('atlas-evidence').scrollIntoView({block:'start'});browser.document.getElementById('atlas-evidence-heading').focus({preventScroll:true});});
         const copy=browser.document.createElement('button');copy.type='button';copy.textContent=known?'Copy citation':'Copy PMID link';copy.setAttribute('aria-label',`${copy.textContent} for PMID ${pmid}`);copy.addEventListener('click',async()=>{const ok=await browser.OglcnacProteinViewer.copyText(citation(known?paper:{pmid}));options.publicationStatus.textContent=ok?`Citation for PMID ${pmid} copied.`:'Copying is unavailable in this browser. Open the PMID link for citation details.';});
         const study=browser.document.createElement('a');study.href='/atlas/study/?pmid='+pmid;study.textContent='Explore this study';actions.append(evidence,copy,study);item.append(content,actions);list.append(item);
         if(focusPmid===pmid){const target=focusAction?.startsWith('Copy')?copy:evidence;target.focus({preventScroll:true});}

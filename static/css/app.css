@@ -5180,6 +5180,12 @@ html { scroll-padding-top:120px; }
 #atlas-sites [data-result]:not(:empty) { margin-block: 1rem; }
 #atlas-sites caption { text-align: left; font-weight: 650; padding: .5rem; }
 
+#browse-records[aria-pressed=true], #browse-sites[aria-pressed=true] { background: var(--brand-blue); color: white; }
+#site-directory .record-actions { align-items: end; gap: .75rem 1rem; }
+#site-directory label { display: inline-flex; gap: .45rem; align-items: center; min-height: 44px; }
+#site-directory select, #atlas-contacts select { max-width: 100%; min-height: 44px; }
+#atlas-contacts [data-entries]:not([hidden]) { display: grid; gap: .25rem; max-width: 100%; }
+
 /* Research workflows share the established Atlas typography and colors. */
 .atlas-autocomplete{position:relative;min-width:0}
 .atlas-suggestion-status{font-size:.76rem;line-height:1.45;color:#526575;margin:.35rem 0 0}

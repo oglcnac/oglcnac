@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=21cb8d2166379906">
+  <link rel="stylesheet" href="/static/css/app.css?v=02f1fbd55089abfe">
   <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
 
 </head>
@@ -89,7 +89,7 @@
  <div class="container record-layout">
   <nav class="record-section-nav" aria-label="Record sections"><details><summary>On this record</summary><div class="section-index-links">
     <a href="#atlas-overview">Overview</a><a href="#atlas-filters">Evidence filters</a><a href="#atlas-landscape">Modification map</a><a href="#atlas-features">Domains &amp; regions</a><a href="#atlas-sequence">Sequence</a><a href="#atlas-peptides">Peptides</a><a href="#atlas-evidence">Experimental evidence</a><a href="#atlas-all-fields">All record fields</a><a href="#atlas-publications">Publications</a>
-  </div></details><p>O-GlcNAcAtlas 5.0<br><a href="/atlas/tutorial/">Interpret this record</a></p></nav>
+  </div></details><p><span data-atlas-release-name>O-GlcNAcAtlas</span><br><a href="/atlas/tutorial/">Interpret this record</a></p></nav>
   <div class="record-main">
    <header class="detail-hero record-overview" id="atlas-overview">
     <p class="record-breadcrumb"><a href="/atlas/">O-GlcNAcAtlas</a><span aria-hidden="true">/</span>Protein record</p>
@@ -100,6 +100,7 @@
     </dl>
     <div id="atlas-other-names" hidden></div>
     <div class="record-actions" id="atlas-record-actions" hidden><button type="button" id="atlas-download-record">Download complete record</button><button type="button" id="atlas-copy-accession">Copy accession</button><a id="atlas-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#atlas-publications">Source publications</a><a id="atlas-analyze" href="/analysis/">Analyze in Workbench</a><button type="button" id="atlas-report">Export research report</button><details class="atlas-save-disclosure"><summary>Save to collection</summary><div id="atlas-detail-save" class="atlas-save-controls"></div><a href="/atlas/collections/">My collections</a></details></div>
+    <details id="atlas-interactor" class="figure-export" hidden><summary></summary><p></p><a>Open OGT-PIN interaction evidence</a></details>
     <p id="atlas-copy-status" class="protein-action-status" role="status" aria-live="polite"></p>
     <dl class="protein-record-metrics" id="atlas-record-metrics" hidden><div><dt>Reported numeric positions</dt><dd id="atlas-position-count"></dd></div><div><dt>Evidence records</dt><dd id="atlas-record-count"></dd></div><div><dt>Source publications</dt><dd id="atlas-publication-count"></dd></div><div><dt>Sequence length</dt><dd id="atlas-length">Loading…</dd></div></dl>
    </header>
@@ -118,6 +119,14 @@
       <div data-result></div>
       <div class="table-scroll" tabindex="0" role="region" aria-label="Sites on this protein"><table><thead><tr><th>Select</th><th>Site</th><th>Records</th><th>Publications</th><th>Publications with unambiguous assignments</th></tr></thead><tbody></tbody></table></div>
       <div class="record-actions" data-pager hidden><button type="button" data-prev>Previous</button><span data-page></span><button type="button" data-next>Next</button></div>
+    </details>
+    <details id="atlas-contacts" class="figure-export">
+      <summary>Experimental structure contacts</summary>
+      <p>Check whether a selected residue is observed in a PDB structure and which other polymer chains are nearby in biological assembly 1.</p>
+      <div class="record-actions"><button type="button" data-find disabled>Find structures for this site</button>
+      <label hidden data-entries>Structure <select></select></label>
+      <button type="button" data-measure hidden>Measure contacts</button></div>
+      <p data-status role="status">Select a mapped site on the protein map.</p><div data-output></div>
     </details>
     <section id="atlas-structure" aria-labelledby="atlas-structure-title" style="margin-block:1.75rem;border-top:1px solid #d6dfe7;padding-top:1rem">
       <h3 id="atlas-structure-title">Predicted 3D structure</h3>
@@ -155,7 +164,7 @@
     <div class="detail-section-heading"><h2>All record fields</h2></div><p class="detail-help">This table retains every field in the source records. Its CSV includes all fields, including columns hidden from view.</p>
     <div class="table-scroll" tabindex="0" role="region" aria-label="All curated Atlas fields table"><table class="table detail-table" id="detail3"><thead><tr></tr></thead><tbody id="atlas-export-rows"></tbody></table></div>
    </section>
-   <section class="detail-section record-publications" id="atlas-publications" hidden><div class="detail-section-heading"><h2>Source publications</h2></div><p id="atlas-publication-summary"></p><p id="atlas-publication-status" class="atlas-metadata-status" role="status" aria-live="polite"></p><ul id="atlas-publication-list"></ul><p class="atlas-metadata-status"><a href="/citations/">How to cite O-GlcNAcAtlas</a> · <a href="/licenses/">Metadata sources and terms</a></p></section>
+   <section class="detail-section record-publications" id="atlas-publications" hidden><div class="detail-section-heading"><h2>Source publications</h2></div><label><input type="checkbox" id="atlas-mutagenesis-papers"> Only publications reporting mutagenesis</label><p id="atlas-publication-summary"></p><p id="atlas-publication-status" class="atlas-metadata-status" role="status" aria-live="polite"></p><ul id="atlas-publication-list"></ul><p class="atlas-metadata-status"><a href="/citations/">How to cite O-GlcNAcAtlas</a> · <a href="/licenses/">Metadata sources and terms</a></p></section>
   </div>
  </div>
 </section>
@@ -163,9 +172,10 @@
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
 <script src="/static/js/atlas-site-comparison.js?v=185c405bf2f17077"></script>
+<script src="/static/js/atlas-experimental.js?v=5b457777e5652006"></script>
 <script src="/static/js/atlas-structure.js?v=4dcf279d8e5e2a44"></script>
 <script src="/static/js/protein-viewer.js?v=6af07fd26be0d377"></script>
-<script src="/static/js/atlas-evidence.js?v=e198ab17c980c760"></script>
+<script src="/static/js/atlas-evidence.js?v=fc21498d75752500"></script>
 <script src="/static/js/protein-features.js?v=a709207736011337"></script>
 <script src="/static/js/atlas-tools.js?v=00a301f800c4aaa5"></script>
 <script src="/static/js/research-workflows.js?v=a01bb789d7455578"></script>
@@ -211,6 +221,11 @@
 </footer>
 
 <script>
+  window.OglcnacStaticData.loadAtlasRelease().then(data=>{
+    const label=document.querySelector('[data-atlas-release-name]');
+    if(label && data.release?.name)label.textContent=data.release.name;
+  }).catch(()=>{});
+
   const atlasStructure = OglcnacStructure.create(document.getElementById("atlas-structure"), ATLAS_ACCESSION);
   function peptideDescriptor(record) {
     const peptide = record.peptide_seq || "";
@@ -283,6 +298,7 @@
   let atlasProteinViewer;
   let atlasFasta = '';
   let atlasEvidenceController, atlasFeatureViewer, atlasLoadGeneration = 0;
+  const atlasContacts = OglcnacExperimental.create(document.getElementById('atlas-contacts'),ATLAS_ACCESSION);
   let atlasAppliedRows, atlasAppliedBase;
   const atlasSiteList = OglcnacSiteComparison.create(document.getElementById('atlas-sites'));
   const sameAtlasRows = (a, b) => a && a.length === b.length && a.every((row, index) => row === b[index]);
@@ -344,6 +360,7 @@
   }
   function applyAtlasSelection(selection) {
     atlasStructure.select(selection);
+    atlasContacts.select(selection.site, atlasProteinViewer?.getSequence() || '');
     atlasEvidenceController?.setSelection(selection);
     atlasFeatureViewer?.setSelection(selection);
     document.querySelectorAll('#protein-sequence [data-sequence-position]').forEach(span => {
@@ -373,6 +390,7 @@
     document.getElementById('atlas-position-count').textContent = window.OglcnacProteinViewer.summarize(payload.records).sites.length.toLocaleString();
     document.getElementById('atlas-record-count').textContent = payload.records.length.toLocaleString();
     document.getElementById('atlas-publication-count').textContent = atlasView.publications(payload.records).length.toLocaleString();
+    OglcnacExperimental.interaction(document.getElementById('atlas-interactor'),ATLAS_ACCESSION);
     atlasCompleteRecords = payload.records;
     atlasCompleteFields = atlasView.exportFields(payload.records);
     if (!atlasExportTable) {
@@ -463,6 +481,7 @@
     atlasFasta = '';
     atlasAppliedRows = atlasAppliedBase = null;
     atlasSiteList.update([], '');
+    atlasContacts.select(null,'');
     document.getElementById('atlas-download-fasta').disabled = true;
     document.getElementById('atlas-copy-fasta').disabled = true;
     retryRecord.hidden = true;
@@ -506,6 +525,7 @@
     atlasFeatureViewer = window.OglcnacProteinFeatures.create(document.getElementById('atlas-feature-viewer'), { accession: ATLAS_ACCESSION });
     atlasEvidenceController = window.OglcnacAtlasEvidence.create(document.getElementById('atlas-filters'), {
       records: payload.records,
+      mutagenesisToggle: document.getElementById('atlas-mutagenesis-papers'),
       publicationList: document.getElementById('atlas-publication-list'),
       publicationSummary: document.getElementById('atlas-publication-summary'),
       publicationStatus: document.getElementById('atlas-publication-status'),
@@ -522,8 +542,9 @@
       accession: ATLAS_ACCESSION, records: payload.records, onSelect: applyAtlasSelection
     });
     atlasProteinViewer.setEvidence(window.OglcnacAtlasEvidence.filter(payload.records, atlasEvidenceController.getFilters()));
-    if (window.location.hash === '#atlas-landscape') {
-      requestAnimationFrame(() => document.getElementById('atlas-landscape').scrollIntoView({ block: 'start' }));
+    if (['#atlas-landscape','#atlas-publications','#atlas-evidence'].includes(location.hash)) {
+      const target = document.getElementById(location.hash.slice(1));
+      requestAnimationFrame(() => target.scrollIntoView({block:'start'}));
     }
     atlasRecordState.dataset.state = "ready";
     atlasRecordState.textContent =
