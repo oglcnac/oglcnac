@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=a4ce33556037b912">
+  <link rel="stylesheet" href="/static/css/app.css?v=ace5383dc73b2d8d">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -103,7 +103,7 @@
 
 <section id="site-directory" class="content-section" hidden><div class="container">
   <h2>Browse reported sites</h2>
-  <div class="record-actions"><label>Species <select data-species-filter></select></label><label>Reported residue <select data-residue></select></label>
+  <div class="record-actions"><label>Species <select data-species-filter></select></label><details class="residue-picker"><summary data-residue-summary>Reported residues · All</summary><fieldset data-residues><legend>Include any selected residue</legend></fieldset></details>
     <label><input type="checkbox" data-mut> Mutagenesis reported</label>
     <label><input type="checkbox" data-clear> Unambiguous assignment</label></div>
   <details class="figure-export" data-more><summary>More filters</summary>
@@ -115,6 +115,7 @@
       <label>Site has low-throughput or mutagenesis evidence<select data-evidence-state="direct"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
       <label>Phosphorylation at this residue<select data-evidence-state="phosphosite"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
       <label>Phosphorylation within 1–5 residues<select data-evidence-state="phospho"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Any nearby phosphorylation, acetylation or ubiquitination (1–5 residues)<select data-evidence-state="nearby"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
       <label>Acetylation within 1–5 residues<select data-evidence-state="acetyl"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
       <label>Ubiquitination within 1–5 residues<select data-evidence-state="ubiquitin"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
       <label>Parent protein has low-throughput OGT-PIN evidence<select data-evidence-state="pin"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
@@ -123,6 +124,7 @@
     </div>
     <div class="record-actions"><label>Peptide outcome <select data-outcome><option value="">Any outcome</option></select></label>
       <label>Model confidence <select data-band><option value="">Any confidence</option><option>Very high</option><option>Confident</option><option>Low</option><option>Very low</option><option>Unavailable</option></select></label></div>
+    <p>Option counts apply the other directory filters. The table text search narrows the displayed rows afterward.</p>
     <p>Site pLDDT describes confidence in local model geometry. Confirmed PDB counts include each structure with the observed residue once. A plus sign marks a lower bound while some candidate entries await checking. A dash means unassessed.</p>
     <p data-context-status role="status"></p>
   </details>
@@ -258,7 +260,7 @@ if(atlasBrowseParams.get("view")!=="sites") loadBrowse(atlasBrowseParams.get("sp
 
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
 <script src="/static/js/atlas-directory-compare.js?v=49fe533d4c81e79f"></script>
-<script src="/static/js/atlas-site-directory.js?v=61c8a84b314f0370"></script>
+<script src="/static/js/atlas-site-directory.js?v=67837fee7caabe37"></script>
 
 </body>
 </html>

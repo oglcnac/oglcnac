@@ -29,6 +29,16 @@ window.OglcnacSiteRecord = function(root, accession, records) {
     find('uniprot').textContent=format(row.uniprot_window);
     const both=row.atlas_window && row.uniprot_window;
     find('agreement').textContent=both?('Residue '+(row.atlas_window[0]===row.uniprot_window[0]?'agrees':'differs')+' · ±5 window '+(JSON.stringify(row.atlas_window)===JSON.stringify(row.uniprot_window)?'agrees':'differs')):'Agreement unavailable';
+    const numbering=row.coordinate_translations||[];
+    find('numbering-label').hidden=find('numbering').hidden=!numbering.length;
+    find('numbering').replaceChildren(...numbering.map(item=>{
+      const line=node('div','');
+      const pairs=item.pairs.map(([canonical,iso])=>item.canonical+' '+row.residue+canonical+' ↔ '+item.isoform+' '+row.residue+iso);
+      line.textContent=item.status==='mapped'?pairs.join(' · '):pairs.length?
+        'Source numbering unresolved. Possible coordinates: '+pairs.join(' or '):
+        item.isoform+' · Unresolved: no verified unchanged residue correspondence.';
+      return line;
+    }));
     const counts=new Map();
     for(const outcome of Object.values(row.peptide_outcomes))counts.set(outcome,(counts.get(outcome)||0)+1);
     find('peptides').textContent=[...counts].map(([k,v])=>k+' ('+v+')').join(' · ');

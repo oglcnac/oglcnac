@@ -5297,3 +5297,8 @@ html { scroll-padding-top:120px; }
 #site-directory .atlas-evidence-states{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:.75rem 1rem;align-items:stretch}
 #site-directory .atlas-evidence-states label{display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;text-align:left;gap:.25rem}
 .atlas-evidence-states select{width:100%}
+
+.residue-picker summary{cursor:pointer;padding:.6rem 0;font-weight:600}
+.residue-picker fieldset{display:flex;flex-wrap:wrap;gap:.5rem 1rem;border:0;padding:.25rem 0;max-width:26rem}
+.residue-picker legend{font-size:.85rem;color:#415e6b}
+#site-directory .residue-picker label{display:inline-flex;flex-direction:row;align-items:center;gap:.35rem}

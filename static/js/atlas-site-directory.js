@@ -1,7 +1,7 @@
 (() => {
   const root = document.getElementById('site-directory');
   const find = key => root.querySelector('[data-'+key+']');
-  const species = find('species-filter'), residue = find('residue');
+  const species = find('species-filter'), residues = find('residues');
   const params = new URLSearchParams(location.search);
   const introduction = document.querySelector('.page-hero .page-lead');
   const recordIntro = introduction.textContent;
@@ -27,6 +27,10 @@
   const columns={phosphosite:1,phospho:2,acetyl:3,ubiquitin:4,pin:5,observed:6};
   function evidenceState(key,row,i,group){
     if(!context || !review)return null;
+    if(key==='nearby'){
+      const nearby=context[i].slice(2,5);
+      return nearby.includes(1)?1:nearby.every(value=>value===0)?0:null;
+    }
     if(key==='direct')return review.get(row)[5][group];
     if(key==='verifiedpdb'){
       const [, ,confirmed,checked]=review.get(row);
@@ -85,19 +89,54 @@
   }
   more.addEventListener('toggle',enableFilters);
   const speciesName = value => value.charAt(0).toUpperCase()+value.slice(1);
-  function matchesOutcome(mask){
-    if(outcome.value==='mixed outcomes')return Boolean(mask & (mask-1));
-    if(peptide.checked && outcome.value!=='supports position')return false;
-    return Boolean(mask & (1<<outcomes.indexOf(outcome.value)));
-  }
   function render() {
     const mut=find('mut').checked, clear=find('clear').checked;
     const index = 4 + Number(mut) + 2*Number(clear);
     const search=term.value.trim().toLowerCase();
-    const matches = rows.filter((row,i) => (!accession || accession===row[1]) && (!band.value || (review && confidence(review.get(row)[1])===band.value)) &&
-      (!outcome.value || (review && matchesOutcome(review.get(row)[0][index-4]))) && (!search || (context && [row[1],String(row[3])+row[2],texts[context[i].at(-1)]].join(' ').toLowerCase().includes(search))) && (!peptide.checked || context?.[i][0][index-4]>0) &&
-      states.every(el=>!el.value || (context && (String(evidenceState(el.dataset.evidenceState,row,i,index-4)??'unknown')===el.value))) && row[index] && (!species.value || row[0] === species.value) &&
-      (!residue.value || (row[3] || 'Unreported') === residue.value));
+    const boxes=[...residues.querySelectorAll('input')];
+    const selected=boxes.filter(box=>box.checked).map(box=>box.value);
+    const chosenResidues=new Set(selected);
+    const facets=[species,residues,band,outcome,...states];
+    const choices=[species.value,chosenResidues,band.value,outcome.value,...states.map(el=>el.value)];
+    const counters=facets.map(()=>new Map());
+    const matches=[];
+    rows.forEach((row,i)=>{
+      if(!row[index] || (accession && accession!==row[1]))return;
+      if(peptide.checked && !(context?.[i][0][index-4]>0))return;
+      if(search && !(context && [row[1],String(row[3])+row[2],texts[context[i].at(-1)]].join(' ').toLowerCase().includes(search)))return;
+      const mask=review?.get(row)[0][index-4]||0;
+      const labels=tags.filter((tag,j)=>tag==='mixed outcomes'?Boolean(mask & (mask-1)):
+        (!peptide.checked || tag==='supports position') && Boolean(mask & (1<<outcomes?.indexOf(tag))));
+      const values=[[row[0]],[row[3]||'Unreported'],review?[confidence(review.get(row)[1])]:[],labels,
+        ...states.map(el=>context?[String(evidenceState(el.dataset.evidenceState,row,i,index-4)??'unknown')]:[])];
+      let missed=-1;
+      for(let j=0;j<choices.length;j++){
+        const choice=choices[j];
+        const ok=j===1?!choice.size || choice.has(values[j][0]):!choice || values[j].includes(choice);
+        if(!ok){
+          if(missed!==-1)return;
+          missed=j;
+        }
+      }
+      if(missed===-1)matches.push(row);
+      for(let j=0;j<facets.length;j++){
+        if(missed!==-1 && missed!==j)continue;
+        const counts=counters[j];
+        for(const value of ['',...values[j]])counts.set(value,(counts.get(value)||0)+1);
+      }
+    });
+    facets.forEach((control,j)=>{
+      if(control===residues){
+        for(const box of boxes)box.nextElementSibling.textContent=box.value+' ('+(counters[j].get(box.value)||0).toLocaleString()+')';
+      }else{
+        for(const option of control.options){
+          if(!option.hasAttribute('value'))option.value=option.textContent;
+          option.dataset.label??=option.textContent;
+          option.textContent=option.dataset.label+' ('+(counters[j].get(option.value)||0).toLocaleString()+')';
+        }
+      }
+    });
+    find('residue-summary').textContent='Reported residues · '+(selected.join(', ')||'All');
     const query = new URLSearchParams({view:'sites'});
     if(table.filterInput.value)query.set('q',table.filterInput.value);
     if(accession)query.set('accession',accession);
@@ -108,7 +147,7 @@
     for(const el of states)if(el.value)query.set(el.dataset.evidenceState,el.value);
     for(const key of new URLSearchParams(location.search).getAll('sel'))query.append('sel',key);
     if(species.value) query.set('species',species.value);
-    if(residue.value) query.set('residue',residue.value);
+    for(const value of selected)query.append('residue',value);
     if(mut) query.set('mutagenesis','1');
     if(clear) query.set('unambiguous','1');
     history.replaceState({},'',location.pathname+'?'+query);
@@ -167,7 +206,12 @@
         try { await loading; } catch {find('context-status').textContent='Supplementary evidence unavailable. Reopen More filters to retry.';} finally {loading=null;}
         compare.restore(rows,params);
         options(species,rows.map(r=>r[0]),params.get('species'),'All species');
-        options(residue,rows.map(r=>r[3]||'Unreported'),params.get('residue'),'All residues');
+        const initialResidues=params.getAll('residue');
+        for(const value of [...new Set(rows.map(r=>r[3]||'Unreported'))].sort()){
+          const label=document.createElement('label'), box=document.createElement('input'), caption=document.createElement('span');
+          box.type='checkbox';box.value=value;box.checked=initialResidues.includes(value);
+          caption.textContent=value;label.append(box,caption);residues.append(label);
+        }
         find('mut').checked=params.get('mutagenesis')==='1'; find('clear').checked=params.get('unambiguous')==='1';
       }catch{find('status').textContent='Site directory unavailable. Select Sites to retry.';return;}
     }

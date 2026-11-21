@@ -35,3 +35,4 @@ pdb_entries_confirmed,integer,"Distinct entries with an observed, matching depos
 low_throughput_or_mutagenesis,flag,At least one site record reports low throughput or mutagenesis. Zero requires complete negative evidence. Blank means unassessed.
 window_mean_plddt,number,Mean per-residue AlphaFold pLDDT at the site and up to five residues on either side in the same verified model fragment.
 window_modeled_residues,integer,"Number of modeled residues contributing to window_mean_plddt, including the site."
+coordinate_translations,json,"Canonical and isoform accession pairs for represented UniProt isoforms. Each position pair is [canonical, isoform], one-based. Unresolved records can retain conditional alternatives. Blank when no represented isoform applies."
