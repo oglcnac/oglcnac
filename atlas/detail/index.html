@@ -107,6 +107,16 @@
    <section class="detail-section" id="atlas-landscape" hidden>
     <div class="detail-section-heading"><h2>Modification landscape</h2><a href="/atlas/tutorial/#protein-map">About this map</a></div>
     <div id="atlas-protein-viewer"></div><details id="atlas-figure-export" class="figure-export"></details>
+    <section id="atlas-structure" aria-labelledby="atlas-structure-title" style="margin-block:1.75rem;border-top:1px solid #d6dfe7;padding-top:1rem">
+      <h3 id="atlas-structure-title">Predicted 3D structure</h3>
+      <p>Explore a reported site in its AlphaFold model. The local confidence score (pLDDT) describes the predicted coordinates.</p>
+      <p data-evidence></p>
+      <button type="button" data-load disabled>Load 3D structure</button>
+      <a data-source hidden>View model in AlphaFold DB</a>
+      <p data-status role="status" style="font-weight:600"></p>
+      <p data-legend hidden><small>Magenta marks the selected site. Model colors show confidence from orange (very low) to dark blue (very high).</small></p>
+      <div data-canvas hidden style="position:relative; height:clamp(300px,52vh,520px); overflow:hidden" aria-label="Interactive predicted protein structure"></div>
+    </section>
    </section>
    <section class="detail-section" id="atlas-features" hidden>
     <div class="detail-section-heading"><h2>Domains &amp; regions</h2><a href="/atlas/tutorial/#biological-context">About these annotations</a></div>
@@ -139,6 +149,7 @@
 <script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
+<script src="/static/js/atlas-structure.js?v=1c44d529989695c2"></script>
 <script src="/static/js/protein-viewer.js?v=6af07fd26be0d377"></script>
 <script src="/static/js/atlas-evidence.js?v=e198ab17c980c760"></script>
 <script src="/static/js/protein-features.js?v=a709207736011337"></script>
@@ -186,6 +197,7 @@
 </footer>
 
 <script>
+  const atlasStructure = OglcnacStructure.create(document.getElementById("atlas-structure"), ATLAS_ACCESSION);
   function peptideDescriptor(record) {
     const peptide = record.peptide_seq || "";
     return {
@@ -291,6 +303,7 @@
     document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   function applyAtlasEvidence(selection) {
+    atlasStructure.evidence(selection);
     if (!sameAtlasRows(atlasAppliedRows, selection.records)) {
       atlasPeptideTable.setRows(selection.records.map(atlasPeptideRow));
       atlasEvidenceTable.setRows(selection.records.map(atlasEvidenceRow));
@@ -314,6 +327,7 @@
     });
   }
   function applyAtlasSelection(selection) {
+    atlasStructure.select(selection);
     atlasEvidenceController?.setSelection(selection);
     atlasFeatureViewer?.setSelection(selection);
     document.querySelectorAll('#protein-sequence [data-sequence-position]').forEach(span => {
@@ -420,6 +434,7 @@
     document.getElementById('atlas-copy-fasta').disabled = !sequence;
     atlasProteinViewer.setSequence(atlasFasta);
     atlasFeatureViewer.setSequence(sequence);
+    atlasStructure.setSequence(sequence);
   }
 
   async function loadAtlasDetail() {
