@@ -45,6 +45,8 @@ window.OglcnacStructure = (() => {
       camera.setState({mode:'orthographic', target:origin, up:up.map(x => x / length(up)),
         position:origin.map((x,i) => x + dirC[i] * distance / length(dirC)),
         radius:structure.boundary.sphere.radius * 1.5}, 0);
+      camera.update();
+      viewer.plugin.canvas3d.requestDraw();
       overview = true;
     }
     function placeLabel() {
@@ -142,6 +144,7 @@ window.OglcnacStructure = (() => {
             throw new Error('The loaded coordinates differ from the Atlas sequence.');
           }
         }
+        viewer.plugin.canvas3d.setProps({camera:{manualReset:true}});
         const surface = canvas.querySelector('canvas');
         label = document.createElement('span');
         label.hidden = true;
