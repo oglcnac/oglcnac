@@ -310,6 +310,18 @@
 
   window.OglcnacStaticData = {
     loadAtlasDeliveryManifest: () => loadJson("/static/data/atlas-v2/manifest.json?v=47dea0f711b0be20"),
+    async loadSiteReview(accession) {
+      const base='/static/data/site-context-v1/review/';
+      const manifest=await loadJson(base+'manifest.json'), file=accessionBucket(accession)+'.json';
+      const data=await loadJson(base+file+'?v='+manifest.files[file]);
+      const {files,...source}=manifest;
+      return {rows:data[accession]||[],source:{...source,site_bucket_sha256:files[file]}};
+    },
+    async loadReviewIndex(name) {
+      const base='/static/data/site-context-v1/review/';
+      const manifest=await loadJson(base+'manifest.json');
+      return loadJson(base+name+'?v='+manifest.files[name]);
+    },
     async loadSiteAnnotations(accession) {
       const manifest=await loadJson('/static/data/site-context-v1/manifest.json?v=25693d1a7dd5ce8e');
       const bucket=await loadJson('/static/data/site-context-v1/proteins/'+accessionBucket(accession)+'.json?v='+manifest.revision);

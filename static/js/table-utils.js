@@ -56,6 +56,11 @@
     return rows
       .map((row, index) => ({ index, row }))
       .sort((left, right) => {
+        const a=left.row[columnIndex], b=right.row[columnIndex];
+        if(a && b && typeof a==='object' && typeof b==='object' && 'sortNumber' in a && 'sortNumber' in b){
+          if(a.sortNumber==null || b.sortNumber==null)return Number(a.sortNumber==null)-Number(b.sortNumber==null) || left.index-right.index;
+          return (a.sortNumber-b.sortNumber)*multiplier || left.index-right.index;
+        }
         const compared =
           compareCells(left.row[columnIndex], right.row[columnIndex]) *
           multiplier;

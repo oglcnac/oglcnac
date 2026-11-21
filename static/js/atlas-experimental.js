@@ -76,7 +76,7 @@ window.OglcnacExperimental = (() => {
         cancel();measure.disabled=false;status.textContent=message;
       };
       try {
-        worker=new Worker('/static/js/atlas-contact-worker.js?v=597abfd8bd4f6a4e');
+        worker=new Worker('/static/js/atlas-contact-worker.js?v=48d97d1eef773fef');
         worker.onerror=()=>finish('The coordinate reader could not run. Try again.');
         worker.onmessage=({data})=>{
           if(current!==revision)return;

@@ -110,10 +110,11 @@ window.OglcnacStructure = (() => {
         const res = await fetch('https://alphafold.ebi.ac.uk/api/prediction/' + encodeURIComponent(accession), {signal:AbortSignal.timeout(20000)});
         if (res.status === 404) throw new Error('AlphaFold DB has no model for this accession.');
         if (!res.ok) throw new Error('AlphaFold DB could not be reached.');
-        const entries = (await res.json()).filter(e => e.uniprotAccession === accession && e.bcifUrl?.startsWith('https://alphafold.ebi.ac.uk/files/'));
+        const entries = (await res.json()).filter(e => e.uniprotAccession === accession && !e.isComplex && e.entryId?.replace(/-F[0-9]+$/,'')==='AF-'+accession && /-F[0-9]+$/.test(e.entryId) && e.bcifUrl?.startsWith('https://alphafold.ebi.ac.uk/files/'));
         if (!entries.length) throw new Error('No AlphaFold model matches this exact accession.');
         const verified = entries.map(e => ({...e, start:Number(e.uniprotStart), end:Number(e.uniprotEnd)}))
-          .filter(e => e.start >= 1 && e.end <= sequence.length && e.end >= e.start && sequence.slice(e.start-1,e.end) === e.sequence);
+          .filter(e => e.start >= 1 && e.end <= sequence.length && e.end >= e.start && sequence.slice(e.start-1,e.end) === e.sequence)
+          .sort((a,b)=>a.start-b.start || b.end-a.end || a.entryId.localeCompare(b.entryId));
         entry = verified.find(e => selection.position >= e.start && selection.position <= e.end) || verified[0];
         if (!entry) throw new Error('The model sequence could not be verified against the Atlas sequence.');
         source.href = 'https://alphafold.ebi.ac.uk/entry/' + encodeURIComponent(accession);

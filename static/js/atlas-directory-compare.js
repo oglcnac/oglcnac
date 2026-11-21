@@ -56,25 +56,29 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
       try {context=await comparisonEvidence(sites);} catch {context=new Map();}
       if(current!==revision)return;
       const table=document.createElement('table'),head=table.createTHead().insertRow();
-      for(const field of ['Site','Source records','Publications','Unambiguous records','Reported methods','Rows with unique peptide support','Phosphorylation at residue','Nearby phosphorylation','Nearby acetylation','Nearby ubiquitination','Parent protein low-throughput OGT-PIN evidence','Observed PDB segment entries']) head.append(make('th',field));
+      for(const field of ['Site','Source records','Publications','Unambiguous records','Reported methods','Rows with unique peptide support','Phosphorylation at residue','Nearby phosphorylation','Nearby acetylation','Nearby ubiquitination','Parent protein low-throughput OGT-PIN evidence','Observed PDB segment entries','Confirmed PDB entries','Site pLDDT','Peptide outcomes']) head.append(make('th',field));
       const body=table.createTBody();
       for(const s of sites){
         const rows=records.filter(r=>r.accession===s.id && Number(r.position_in_protein)===s.pos &&
           (String(r.species||'').trim().toLowerCase()||'unreported')===s.species && String(r.site_residue||'').trim().toUpperCase()===s.aa);
         const tr=body.insertRow(), link=make('a',s.id+' · '+s.name);
-        link.href='/atlas/detail/?'+new URLSearchParams({id:s.id,site:s.pos})+'#atlas-landscape';
+        link.href='/atlas/detail/?'+new URLSearchParams({id:s.id,site:s.pos,organism:s.species,residue:s.aa})+'#site-record';
         tr.insertCell().append(link);
         tr.insertCell().textContent=rows.length;
         tr.insertCell().textContent=OglcnacRecordView.publications(rows).length;
         tr.insertCell().textContent=rows.filter(r=>String(r.ambiguous).trim().toLowerCase()==='unambiguous').length;
         tr.insertCell().textContent=OglcnacRecordView.values(rows,'method').join(' · ')||'Not reported';
-        const flags=context.get(JSON.stringify([s.species,s.id,s.pos,s.aa]));
+        const review=context.get(JSON.stringify([s.species,s.id,s.pos,s.aa]));
+        const flags=review?.flags;
         tr.insertCell().textContent=flags?.[0][0]??'Unavailable';
         for(let i=1;i<=5;i++){
           const value=flags?.[i];
           tr.insertCell().textContent=value===1?'Reported':value===0?'No match in snapshot':'Unassessed';
         }
         tr.insertCell().textContent=Number.isInteger(flags?.[6])?flags[6]:'Unassessed';
+        tr.insertCell().textContent=review?.pdb??'Unassessed';
+        tr.insertCell().textContent=review?.score??'Unassessed';
+        tr.insertCell().textContent=review?.peptides.join(' · ')||'Unassessed';
       }
       output.append(table);download.hidden=false;status.textContent='Complete evidence for the selected sites, in selection order.';
     }catch{if(current===revision)status.textContent='Evidence unavailable. Select Compare to retry.';}

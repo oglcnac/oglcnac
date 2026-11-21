@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=faefab21c98bf89b">
+  <link rel="stylesheet" href="/static/css/app.css?v=f05184c1404e984e">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -112,6 +112,10 @@
     <div class="atlas-sidebar-help"><strong>O-GlcNAcAtlas 5.0</strong><a href="/atlas/statistics/">Release &amp; counting rules</a><a href="/atlas/tutorial/">Search guide</a><a href="/atlas/download/">Download datasets</a></div>
   </aside>
   <section class="table-results-section atlas-search-results" aria-labelledby="atlas-results-heading">
+    <details id="protein-text-search" class="figure-export"><summary>Search inside protein records</summary>
+      <form class="record-actions" action="/atlas/search/" method="get"><label>Word or phrase <input type="search" name="text" maxlength="200"></label><button>Search text</button></form>
+      <p>Search names, genes, organisms, peptides, experimental context, annotations and publication citations.</p>
+      <p role="status"></p><ol></ol><button type="button" data-more hidden>Show more matches</button></details>
     <div class="atlas-results-heading"><h2 id="atlas-results-heading">Search results</h2><p id="atlas-match-summary" role="status" aria-live="polite">Search above to explore curated proteins and their evidence.</p></div>
     <p id="atlas-search-status" class="atlas-tool-status" role="status"></p>
     <details id="atlas-batch-report" class="atlas-batch-report" hidden><summary id="atlas-batch-summary">Batch report</summary><button type="button" id="atlas-download-batch">Download batch report</button><div class="table-scroll" tabindex="0" role="region" aria-label="Batch diagnostic results"><table class="table" id="atlas_batch_report"><thead><tr><th>Entry</th><th>Input</th><th>Result</th><th>Atlas accession</th></tr></thead><tbody></tbody></table></div></details>
@@ -151,14 +155,15 @@
   </div>
 </footer>
 
-<script src="/static/js/static-data.js?v=dfd2d4bb0d924ce3"></script>
-<script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
+<script src="/static/js/static-data.js?v=baa6963a27330284"></script>
+<script src="/static/js/table-utils.js?v=52ae1342a27b639b"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
 <script src="/static/js/atlas-evidence.js?v=fc21498d75752500"></script>
 <script src="/static/js/atlas-tools.js?v=00a301f800c4aaa5"></script>
-<script src="/static/js/atlas-search.js?v=0c92d66360e4e851"></script>
+<script src="/static/js/atlas-search.js?v=5e729c6915671f86"></script>
 <script src="/static/js/research-workflows.js?v=a01bb789d7455578"></script>
 <script src="/static/js/atlas-suggestions.js?v=de22f21c7b5f024c"></script>
+<script src="/static/js/atlas-text-search.js?v=5d21813b34a3c323"></script>
 
 </body>
 </html>

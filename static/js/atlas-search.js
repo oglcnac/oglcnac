@@ -10,7 +10,7 @@
   el('atlas-filter-disclosure').open=matchMedia('(min-width:901px)').matches;
   T.mountSave(el('atlas-save-selection'),()=>[...selected]);
   function status(text){el('atlas-search-status').textContent=text;}
-  function url(push){const params=new URLSearchParams(query);if(view==='evidence')params.set('view',view);for(const [key,value] of Object.entries(filters))if(value)params.set(key,value);const next=location.pathname+(params.size?'?'+params:'');if(next!==location.pathname+location.search)history[push?'pushState':'replaceState'](null,'',next);}
+  function url(push){const params=new URLSearchParams(query);const text=new URLSearchParams(location.search).get('text');if(text)params.set('text',text);if(view==='evidence')params.set('view',view);for(const [key,value] of Object.entries(filters))if(value)params.set(key,value);const next=location.pathname+(params.size?'?'+params:'');if(next!==location.pathname+location.search)history[push?'pushState':'replaceState'](null,'',next);}
   function selection(){
     el('atlas-selected-count').textContent=`${selected.size} selected across filters`;
     el('atlas-clear-selection').disabled=!selected.size;

@@ -5283,3 +5283,13 @@ html { scroll-padding-top:120px; }
 
 .study-heading[data-error=true],.study-page[data-error=true]{min-height:0}
 @media(max-width:600px){#collection-tools>div.atlas-tool-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}#collection-tools>div.atlas-tool-actions>button,#collection-tools>div.atlas-tool-actions>a{width:100%;white-space:normal;min-width:0;padding:7px 8px;font-size:.8rem;text-align:center;justify-content:center;line-height:1.5}}
+
+#site-record [data-identity]{max-width:24rem}
+#site-record dl{display:grid;grid-template-columns:minmax(9rem,13rem) minmax(0,1fr);margin:.75rem 0 1rem;font-size:.92rem}
+#site-record dt,#site-record dd{margin:0;padding:.45rem .25rem;border-bottom:1px solid #dce6eb;overflow-wrap:anywhere}
+#site-record dt{color:#415e6b;font-weight:600}
+#site-record [data-body]>details{padding:.55rem 0}
+#site-record [data-contacts],#protein-text-search ol{padding-left:1.6rem;overflow-wrap:anywhere}
+#protein-text-search li{margin:.65rem 0}
+@media(max-width:540px){#site-record dl{grid-template-columns:minmax(5.5rem,36%) minmax(0,1fr)}}
+#protein-text-search mark{display:inline-block;line-height:1.35;max-width:100%;background:#fff0b8;color:inherit}

@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=faefab21c98bf89b">
+  <link rel="stylesheet" href="/static/css/app.css?v=f05184c1404e984e">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -108,6 +108,12 @@
    <section class="detail-section" id="atlas-landscape" hidden>
     <div class="detail-section-heading"><h2>Modification landscape</h2><a href="/atlas/tutorial/#protein-map">About this map</a></div>
     <div id="atlas-protein-viewer"></div><details id="atlas-figure-export" class="figure-export"></details>
+    <details class="figure-export" id="site-record"><summary>Selected site evidence record</summary>
+      <select data-identity aria-label="Reported site identity" hidden></select><p data-status role="status">Select a reported position on the protein map.</p>
+      <div data-body hidden><dl><dt>Atlas sequence</dt><dd data-atlas></dd><dt>UniProt release sequence</dt><dd data-uniprot></dd><dt>Same-coordinate check</dt><dd data-agreement></dd><dt>Peptide evidence</dt><dd data-peptides></dd><dt>AlphaFold confidence</dt><dd data-confidence></dd></dl>
+      <div class="record-actions"><a data-permalink>Site permalink</a><button type="button" data-download>Download site JSON</button></div>
+      <details><summary>Nearest reported sites</summary><p data-neighbors-status></p><ul data-neighbors></ul></details>
+      <details><summary>Compare experimental structures</summary><p>A confirmed entry contains the reported amino acid at the mapped position. Counts use its most-contacted chain in assembly 1 and include heavy atoms on other protein, DNA or RNA chains within 5 Å of the side-chain oxygen.</p><button type="button" data-compare>Compare all confirmed entries</button> <button type="button" data-stop hidden>Stop</button><p data-progress role="status"></p><ol data-contacts></ol></details></div></details>
     <details id="atlas-sites" class="figure-export">
       <summary>Sites on this protein <span data-count></span></summary>
       <p data-note></p>
@@ -178,18 +184,19 @@
   </div>
  </div>
 </section>
-<script src="/static/js/static-data.js?v=dfd2d4bb0d924ce3"></script>
-<script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
+<script src="/static/js/static-data.js?v=baa6963a27330284"></script>
+<script src="/static/js/table-utils.js?v=52ae1342a27b639b"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
+<script src="/static/js/atlas-site-record.js?v=df2aa1fe78b6e441"></script>
 <script src="/static/js/atlas-site-comparison.js?v=185c405bf2f17077"></script>
 <script src="/static/js/atlas-conservation.js?v=31cc748de650d337"></script>
 <script src="/static/js/atlas-proteomics.js?v=c19c3e841886a6d6"></script>
 <script src="/static/js/atlas-nearby.js?v=85e2c78efa5858ab"></script>
-<script src="/static/js/atlas-experimental.js?v=67c88f2ba92a59c6"></script>
+<script src="/static/js/atlas-experimental.js?v=d6fc3a83fb7e6817"></script>
 <script src="/static/js/atlas-solvent.js?v=8e53deb7fb214472"></script>
 <script src="/static/js/atlas-model-context.js?v=abcd262d0b94279a"></script>
-<script src="/static/js/atlas-structure.js?v=645f2b1b0a567c6d"></script>
-<script src="/static/js/protein-viewer.js?v=c64bacfde4214e65"></script>
+<script src="/static/js/atlas-structure.js?v=3b5dbb45cba386f4"></script>
+<script src="/static/js/protein-viewer.js?v=818e4609a6fcc818"></script>
 <script src="/static/js/atlas-evidence.js?v=fc21498d75752500"></script>
 <script src="/static/js/protein-features.js?v=a709207736011337"></script>
 <script src="/static/js/atlas-tools.js?v=00a301f800c4aaa5"></script>
@@ -314,6 +321,7 @@
   let atlasFasta = '';
   let atlasEvidenceController, atlasFeatureViewer, atlasLoadGeneration = 0;
   const updateConservation = OglcnacConservation(document.getElementById('atlas-conservation'), ATLAS_ACCESSION);
+  const updateRecord = OglcnacSiteRecord(document.getElementById('site-record'),ATLAS_ACCESSION,()=>atlasCompleteRecords);
   const updateNearby = OglcnacNearby(document.getElementById("atlas-nearby"),ATLAS_ACCESSION,positions=>atlasProteinViewer?.setModificationOverlay(positions));
   const atlasContacts = OglcnacExperimental.create(document.getElementById('atlas-contacts'),ATLAS_ACCESSION);
   let atlasAppliedRows, atlasAppliedBase;
@@ -376,6 +384,7 @@
     });
   }
   function applyAtlasSelection(selection) {
+    updateRecord(selection.position);
     updateConservation(selection.site,atlasProteinViewer?.getSequence() || '');
     updateNearby(selection.site,atlasProteinViewer?.getSequence() || '');
     atlasStructure.select(selection);
@@ -499,6 +508,7 @@
     atlasFeatureViewer?.destroy(); atlasFeatureViewer = null;
     atlasFasta = '';
     atlasAppliedRows = atlasAppliedBase = null;
+    updateRecord(null);
     atlasSiteList.update([], '');
     atlasContacts.select(null,'');
     document.getElementById('atlas-download-fasta').disabled = true;

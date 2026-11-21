@@ -27,3 +27,8 @@ oma_residue_exact,integer,Assessed OMA reference species with the same amino aci
 nearby_proteomics_datasets,integer,"Distinct identified proteomics datasets mapped within five residues, including the site."
 biogrid_physical_partners,integer,Distinct same-species physical partners of the matched parent gene product in BioGRID.
 biogrid_partners_multiple_publications,integer,Physical partners supported by at least two distinct PubMed identifiers.
+peptide_outcomes,text,"Distinct source-record peptide checks, separated by a vertical bar."
+site_plddt,number,AlphaFold local confidence at the verified Atlas residue (0–100). Blank when unavailable.
+confidence_model,text,Exact AlphaFold DB model identifier and version.
+pdb_candidates_checked,integer,Distinct SIFTS candidate entries checked at residue level. Blank when unassessed.
+pdb_entries_confirmed,integer,"Distinct entries with an observed, matching deposited residue among checked candidates. A lower bound when fewer candidates were checked than spanned the segment."

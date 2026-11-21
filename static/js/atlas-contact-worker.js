@@ -63,7 +63,7 @@ async function measure({pdb,accession,pos,residue}) {
     if(mapped.get(chains.get(chain))!==f.label_seq_id.str(i) || f.label_atom_id.str(i)!==oxygen[residue][1] ||
        f.label_comp_id.str(i)!==oxygen[residue][0] || !usable(f,i)) continue;
     if (!targets.has(chain) || f.occupancy.float(i)>targets.get(chain).occupancy) {
-      targets.set(chain,{chain,x:f.Cartn_x.float(i),y:f.Cartn_y.float(i),z:f.Cartn_z.float(i),occupancy:f.occupancy.float(i),distance:Infinity,partner:'',partnerAtoms:0,nucleic:false});
+      targets.set(chain,{chain,x:f.Cartn_x.float(i),y:f.Cartn_y.float(i),z:f.Cartn_z.float(i),occupancy:f.occupancy.float(i),contactTypes:new Set(),nearest:Infinity,nearestChain:'',partnerType:'',distance:Infinity,partner:'',partnerAtoms:0,nucleic:false});
     }
   }
   for(let i=0;i<atom.rowCount;i++) {
@@ -75,12 +75,14 @@ async function measure({pdb,accession,pos,residue}) {
     for(const target of targets.values()) {
       if(chain===target.chain) continue;
       const squared=(x-target.x)**2+(y-target.y)**2+(z-target.z)**2;
-      if(squared<=25)target.partnerAtoms++;
+      if(squared<target.nearest){target.nearest=squared;target.nearestChain=chain;target.partnerType=type;}
+      if(squared<=25){target.partnerAtoms++;target.contactTypes.add(type); }
       if(protein && squared<target.distance){target.distance=squared;target.partner=chain;}
       if(nucleic && squared<=25)target.nucleic=true;
     }
   }
   return Array.from(targets.values(), t=>({chain:t.chain,partner:t.partner,partnerAtoms:t.partnerAtoms,
+    contactTypes:[...t.contactTypes].sort(),nearest:Number.isFinite(t.nearest)?Math.sqrt(t.nearest):null,nearestChain:t.nearestChain,partnerType:t.partnerType,
     distance:Number.isFinite(t.distance)?Math.sqrt(t.distance):null,nucleic:t.nucleic}));
 }
 onmessage=async ({data})=>{

@@ -141,6 +141,9 @@
       view = selected === null ? "full" : "region";
       if (updateHistory) {
         const url = new browser.URL(browser.location.href);
+        if (position(url.searchParams.get("site")) !== selected) {
+          url.searchParams.delete("organism"); url.searchParams.delete("residue");
+        }
         if (selected === null) url.searchParams.delete("site"); else url.searchParams.set("site", String(selected));
         if (url.href !== browser.location.href) browser.history.pushState(null, "", url);
       }
