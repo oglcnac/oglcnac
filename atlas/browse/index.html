@@ -25,8 +25,8 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=02f1fbd55089abfe">
-  <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
+  <link rel="stylesheet" href="/static/css/app.css?v=8c746ea4ba19655c">
+  <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
 <body class="site-body section-body atlas-section">
@@ -104,6 +104,10 @@
   <div class="record-actions"><label>Species <select data-species-filter></select></label><label>Reported residue <select data-residue></select></label>
     <label><input type="checkbox" data-mut> Mutagenesis reported</label>
     <label><input type="checkbox" data-clear> Unambiguous assignment</label></div>
+  <p>Select up to six reported sites to compare evidence across proteins.</p>
+  <section id="directory-comparison" hidden><h3>Compare site evidence</h3><div class="record-actions" data-chosen></div>
+    <button type="button" data-run disabled>Compare selected sites</button><p role="status"></p>
+    <div class="table-scroll" data-output tabindex="0" role="region" aria-label="Cross-protein site evidence"></div></section>
   <p data-status role="status"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Filtered Atlas site directory"><table id="site-directory-table"><thead><tr><th>Accession</th><th>Reported site</th><th>Species</th><th>Matching records</th></tr></thead><tbody></tbody></table></div>
   </div></section>
 <section id="browse-record-results" class="table-results-section" aria-labelledby="atlas-browse-results-heading">
@@ -148,7 +152,7 @@
   </div>
 </footer>
 
-<script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
+<script src="/static/js/static-data.js?v=5f2ec7f886f47f6f"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script>
   window.OglcnacStaticData.loadAtlasRelease().then(data=>{
@@ -227,7 +231,9 @@ const atlasBrowseParams = new URLSearchParams(window.location.search);
 if(atlasBrowseParams.get("view")!=="sites") loadBrowse(atlasBrowseParams.get("species") || "Human");
 </script>
 
-<script src="/static/js/atlas-site-directory.js?v=5e2d1b6e7e14112b"></script>
+<script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
+<script src="/static/js/atlas-directory-compare.js?v=c21429f4509fb4f9"></script>
+<script src="/static/js/atlas-site-directory.js?v=8bf52d5a54145304"></script>
 
 </body>
 </html>

@@ -25,8 +25,8 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=02f1fbd55089abfe">
-  <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
+  <link rel="stylesheet" href="/static/css/app.css?v=8c746ea4ba19655c">
+  <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
 <body class="site-body section-body interactome-section">
@@ -100,6 +100,8 @@
           <option value="gene_name_a">Partner gene</option>
           <option value="uuid_a">Partner accession</option>
           <option value="species">Species</option>
+          <option value="pmid">Publication (PMID)</option>
+          <option value="detection_method">Detection method</option>
         </select>
       </div>
       <button type="submit">Search OGT-PIN</button>
@@ -153,7 +155,7 @@
   </div>
 </footer>
 
-  <script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
+  <script src="/static/js/static-data.js?v=5f2ec7f886f47f6f"></script>
   <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
   <script>
     const interactomeSearchTable = window.OglcnacTables.create("search_result", {

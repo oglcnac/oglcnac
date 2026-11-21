@@ -7,7 +7,7 @@
   const term = document.getElementById("site-search-term");
   const sourceFields = {
     atlas: [["accession", "Accession"], ["gene_name", "Gene name"], ["protein_name", "Protein name"], ["peptide_seq", "Peptide sequence"], ["species", "Species"]],
-    "ogt-pin": [["uuid_b", "Interactor accession"], ["gene_name_b", "Interactor gene"], ["protein_name_b", "Interactor protein"], ["species", "Species / taxonomy ID"]]
+    "ogt-pin": [["uuid_b", "Interactor accession"], ["gene_name_b", "Interactor gene"], ["protein_name_b", "Interactor protein"], ["species", "Species / taxonomy ID"], ["pmid", "Publication (PMID)"], ["detection_method", "Detection method"]]
   };
   let previousFocus;
   function updateSearch() {

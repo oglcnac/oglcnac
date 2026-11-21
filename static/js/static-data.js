@@ -60,6 +60,7 @@
       uuid_b: "uuid_b",
       gene_name_b: "gene_name_b",
       protein_name_b: "protein_name_b",
+      detection_method: "detection_method",
       species: "ncbi_id_b"
     };
     return record[allowed[field] || "gene_name_b"];
@@ -244,7 +245,8 @@
     const results = [];
     records.forEach((record) => {
       const uuid = record.uuid_b || "";
-      if (!seen.has(uuid) && contains(ogtPinField(record, field), q)) {
+      const match = field === "pmid" ? (String(record.pmid ?? "").match(/\b\d+\b/g) || []).includes(q) : contains(ogtPinField(record, field), q);
+      if (!seen.has(uuid) && match) {
         seen.add(uuid);
         results.push(record);
       }

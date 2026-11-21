@@ -25,8 +25,8 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=02f1fbd55089abfe">
-  <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
+  <link rel="stylesheet" href="/static/css/app.css?v=8c746ea4ba19655c">
+  <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
 <body class="site-body section-body atlas-section protein-record-workspace">
@@ -120,6 +120,7 @@
       <div class="table-scroll" tabindex="0" role="region" aria-label="Sites on this protein"><table><thead><tr><th>Select</th><th>Site</th><th>Records</th><th>Publications</th><th>Publications with unambiguous assignments</th></tr></thead><tbody></tbody></table></div>
       <div class="record-actions" data-pager hidden><button type="button" data-prev>Previous</button><span data-page></span><button type="button" data-next>Next</button></div>
     </details>
+    <details id="atlas-nearby" class="figure-export"><summary>Nearby modifications</summary><p role="status"></p><ul></ul><button type="button" hidden>Retry annotations</button> <a>View UniProt annotations</a></details>
     <details id="atlas-contacts" class="figure-export">
       <summary>Experimental structure contacts</summary>
       <p>Check whether a selected residue is observed in a PDB structure and which other polymer chains are nearby in biological assembly 1.</p>
@@ -168,10 +169,11 @@
   </div>
  </div>
 </section>
-<script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
+<script src="/static/js/static-data.js?v=5f2ec7f886f47f6f"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
 <script src="/static/js/atlas-site-comparison.js?v=185c405bf2f17077"></script>
+<script src="/static/js/atlas-nearby.js?v=b375685ae9df88ca"></script>
 <script src="/static/js/atlas-experimental.js?v=5b457777e5652006"></script>
 <script src="/static/js/atlas-structure.js?v=4dcf279d8e5e2a44"></script>
 <script src="/static/js/protein-viewer.js?v=6af07fd26be0d377"></script>
@@ -298,6 +300,7 @@
   let atlasProteinViewer;
   let atlasFasta = '';
   let atlasEvidenceController, atlasFeatureViewer, atlasLoadGeneration = 0;
+  const updateNearby = OglcnacNearby(document.getElementById("atlas-nearby"),ATLAS_ACCESSION);
   const atlasContacts = OglcnacExperimental.create(document.getElementById('atlas-contacts'),ATLAS_ACCESSION);
   let atlasAppliedRows, atlasAppliedBase;
   const atlasSiteList = OglcnacSiteComparison.create(document.getElementById('atlas-sites'));
@@ -359,6 +362,7 @@
     });
   }
   function applyAtlasSelection(selection) {
+    updateNearby(selection.site,atlasProteinViewer?.getSequence() || '');
     atlasStructure.select(selection);
     atlasContacts.select(selection.site, atlasProteinViewer?.getSequence() || '');
     atlasEvidenceController?.setSelection(selection);

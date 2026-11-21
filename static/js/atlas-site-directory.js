@@ -6,6 +6,7 @@
   const introduction = document.querySelector('.page-hero .page-lead');
   const recordIntro = introduction.textContent;
   const recordButton = document.getElementById('browse-records'), siteButton = document.getElementById('browse-sites');
+  const compareCell = OglcnacDirectoryCompare(document.getElementById('directory-comparison'));
   let rows, table;
   const speciesName = value => value.charAt(0).toUpperCase()+value.slice(1);
   function render() {
@@ -25,7 +26,7 @@
       if(clear)detail.set('ambiguity','unambiguous');
       const link = '/atlas/detail/?'+detail+(mut?'#atlas-publications':'#atlas-landscape');
       const siteName=/^[A-Z]$/.test(aa)?aa+pos:'Position '+pos+(aa?' (reported: '+aa+')':'');
-      return [{text:id,href:link},{text:siteName,href:link},speciesName(organism),counts[index-4]];
+      return [{text:id,href:link},{text:siteName,render:cell=>compareCell(cell,{id,pos,aa,species:organism,name:siteName,link})},speciesName(organism),counts[index-4]];
     }),{preserveState:false});
     find('status').textContent = matches.length.toLocaleString()+(matches.length===1?' reported site entry.':' reported site entries.')+' Filters apply to the same source record.';
   }

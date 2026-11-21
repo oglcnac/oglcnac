@@ -25,8 +25,8 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=02f1fbd55089abfe">
-  <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
+  <link rel="stylesheet" href="/static/css/app.css?v=8c746ea4ba19655c">
+  <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
 <body class="site-body section-body interactome-section protein-record-workspace">
@@ -96,6 +96,8 @@
           <option value="gene_name_a">Partner gene</option>
           <option value="uuid_a">Partner accession</option>
           <option value="species">Species</option>
+          <option value="pmid">Publication (PMID)</option>
+          <option value="detection_method">Detection method</option>
         </select>
       </div>
       <button type="submit">Search OGT-PIN</button>
@@ -111,9 +113,10 @@
     <h1 id="interactome-title">Find an interaction record</h1>
     <p class="record-subtitle">Curated interaction evidence with OGT.</p>
     <dl class="record-identity" id="ogt-identity" hidden><div><dt>Protein</dt><dd id="ogt-protein-name"></dd></div><div><dt>Species</dt><dd id="ogt-species"></dd></div><div><dt>Gene</dt><dd id="ogt-gene-name"></dd></div><div><dt>Partner</dt><dd id="ogt-partner"></dd></div></dl>
-    <div class="record-actions" id="ogt-record-actions" hidden><button type="button" id="ogt-download-record">Download complete record</button><a id="ogt-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#ogt-publications">Source publications</a></div>
+    <div class="record-actions" id="ogt-record-actions" hidden><button type="button" id="ogt-download-record">Download complete record</button><a id="ogt-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#ogt-publications">Source publications</a><a id="pin-atlas" hidden></a></div>
    </header>
    <section class="detail-section" id="ogt-evidence" hidden><div class="detail-section-heading"><h2>Interaction evidence</h2></div><p class="record-section-note">Evidence retains its detection method, source, and curator annotations. An OGT interaction does not establish a modification site.</p>
+    <details id="pin-filter" class="figure-export"><summary>Filter interaction evidence</summary><div class="record-actions"></div></details><p id="pin-filter-summary" role="status"></p>
     <div class="table-scroll" tabindex="0" role="region" aria-label="OGT-PIN interaction evidence table"><table class="table detail-table" id="interactome"><thead><tr><th>Interactor accession</th><th>Alternative identifier</th><th>Interaction detection method</th><th>PMID</th><th>Analytic throughput</th><th>Source</th><th>Curator comments</th><th>Meeting IMEx criteria</th><th>High-stringency interactor</th></tr></thead><tbody id="interactome-detail-rows"></tbody></table></div>
    </section>
    <section class="detail-section record-publications" id="ogt-publications" hidden><div class="detail-section-heading"><h2>Source publications</h2></div><p id="ogt-publication-summary"></p><ul id="ogt-publication-list"></ul><a href="/citations/">How to cite OGT-PIN</a></section>
@@ -139,9 +142,10 @@
   </div>
 </footer>
 
-    <script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
+    <script src="/static/js/static-data.js?v=5f2ec7f886f47f6f"></script>
     <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
     <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
+    <script src="/static/js/ogt-record-evidence.js?v=c37af1c67e0cd899"></script>
     <script>
         const detailParams = new URLSearchParams(window.location.search);
         const detailPath = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "");
@@ -167,10 +171,7 @@
             document.getElementById('ogt-partner').textContent = `${join('gene_name_a')} · ${join('uuid_a')}`;
             document.getElementById('ogt-uniprot-link').href = `https://www.uniprot.org/uniprotkb/${encodeURIComponent(INTERACTOME_UUID_B)}/entry`;
             document.getElementById('ogt-uniprot-link').hidden = !/^[A-Z0-9]{6,10}(?:-\d+)?$/.test(INTERACTOME_UUID_B);
-            const publications = recordView.publications(records);
-            document.getElementById('ogt-publication-summary').textContent = `${publications.length} distinct source ${publications.length === 1 ? 'publication' : 'publications'} linked from these records.`;
-            const list = document.getElementById('ogt-publication-list'); list.replaceChildren();
-            publications.forEach(pmid => { const item = document.createElement('li'), a = document.createElement('a'); a.href = `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`; a.textContent = `PMID ${pmid}`; item.append(a); list.append(item); });
+
         }
         function showOgtContent(visible) {
             document.querySelectorAll('.interactome-detail-page .detail-section').forEach(section => { section.hidden = !visible; });
@@ -245,9 +246,7 @@
                 showOgtContent(true);
                 fillIdentity(payload.records);
                 recovery.hidden = true;
-                interactomeDetailTable.setRows(
-                    payload.records.map(interactomeDetailRow)
-                );
+                OglcnacPinEvidence(payload.records,INTERACTOME_UUID_B,interactomeDetailTable,interactomeDetailRow);
                 interactomeRecordState.dataset.state = "ready";
                 interactomeRecordState.textContent =
                     `${payload.records.length.toLocaleString()} interaction evidence records loaded.`;

@@ -25,8 +25,8 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=02f1fbd55089abfe">
-  <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
+  <link rel="stylesheet" href="/static/css/app.css?v=8c746ea4ba19655c">
+  <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
   <script defer src="/static/hexnac-quest/vendor/papaparse.min.js?v=ac889c7a0c70f5bd"></script>
   <script defer src="/static/js/hexnac-quest-core.js?v=a6b930f07f40ac10"></script>
   <script defer src="/static/js/hexnac-quest-ui.js?v=d8e1e8299c3d2bf2"></script>
@@ -120,6 +120,7 @@
         </div>
         <div class="hq-card">
           <div class="analysis-input-heading"><h2>Prediction results</h2><a href="#hexnac-input" class="analysis-return-link">Edit input ↑</a></div>
+          <details class="figure-export"><summary>Interpret these results</summary><p>Each prediction classifies one input spectrum using its five diagnostic ion intensities. Use the selected-spectrum plot to inspect those intensities. A protein accession or modification position requires separate peptide identification evidence.</p><a href="/hexnac-quest/tutorial/">See the spectrum workflow</a></details>
           <div class="hq-table-wrap table-scroll" tabindex="0" role="region" aria-label="HexNAcQuest prediction results">
             <p class="hq-scroll-note">Scroll horizontally to view all intensity columns.</p>
             <table class="hq-table"><thead><tr><th>pred_outcome</th><th>id</th><th>f126</th><th>f138</th><th>f144</th><th>f168</th><th>f186</th></tr></thead><tbody id="hexnac-results-body"></tbody></table>
