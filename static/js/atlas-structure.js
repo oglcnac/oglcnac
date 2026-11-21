@@ -21,6 +21,7 @@ window.OglcnacStructure = (() => {
     const button = root.querySelector('[data-load]'), canvas = root.querySelector('[data-canvas]');
     const status = root.querySelector('[data-status]'), source = root.querySelector('[data-source]');
     let sequence = '', selection = {}, viewer, entry, ready = false, revision = 0;
+    const showContext=OglcnacModelContext(root.querySelector('[data-model-context]'),accession);
     let queue = Promise.resolve();
     const controls = root.querySelector('[data-camera-controls]');
     const focus = controls.querySelector('[data-focus]');
@@ -70,6 +71,7 @@ window.OglcnacStructure = (() => {
       queue = queue.then(async () => {
         if (!ready || current !== revision) return;
         const { position, site } = selection;
+        showContext(null);
         anchor = null; focus.disabled = true; label.hidden = true;
         await viewer.visual.clearSelection();
         if (!position) { status.textContent = 'Select a site on the protein map to inspect its local confidence.'; return; }
@@ -83,15 +85,22 @@ window.OglcnacStructure = (() => {
         if (atom === undefined || site?.mismatch || amino[h.atoms.label_comp_id.value(atom)] !== sequence[position - 1]) {
           status.textContent = 'Position ' + position + ' could not be mapped confidently to this model.'; return;
         }
-        const score = model.atomicConformation.B_iso_or_equiv.value(atom);
+        const confidence = model.atomicConformation.B_iso_or_equiv;
+        const score = confidence.value(atom);
+        const localConfidence=[];
+        for(let pos=Math.max(1,local-5);pos<=Math.min(entry.sequence.length,local+5);pos++){
+          localConfidence.push(confidence.value(h.residueAtomSegments.offsets[pos-1]));
+        }
+        const mean=localConfidence.reduce((sum,value)=>sum+value,0)/localConfidence.length;
         await viewer.visual.select({data:[{label_seq_id:local, color:{r:190,g:34,b:104}, sideChain:true}]});
         if (current !== revision) return;
         const coordinates = model.atomicConformation;
         anchor = [coordinates.x[atom],coordinates.y[atom],coordinates.z[atom]];
         label.textContent = sequence[position - 1] + position;
         focus.disabled = false; placeLabel();
+        showContext({model,entry,sequence,position,mean,windowSize:localConfidence.length});
         status.textContent = sequence[position - 1] + position + ' · pLDDT ' + score.toFixed(2) + ' / 100 · ' +
-          (score >= 90 ? 'Very high' : score >= 70 ? 'Confident' : score >= 50 ? 'Low' : 'Very low') + ' local confidence';
+          (score >= 90 ? 'Very high' : score >= 70 ? 'Confident' : score >= 50 ? 'Low' : 'Very low') + ' local confidence · ±5-residue mean '+mean.toFixed(1)+' ('+localConfidence.length+' modeled residues)';
       }).catch(() => { status.textContent = 'The viewer could not display the selected site.'; });
     }
     button.onclick = async () => {
@@ -167,6 +176,7 @@ window.OglcnacStructure = (() => {
       }
     };
     return {
+      measurement() { return showContext.snapshot(selection.position); },
       select(value) { selection = value; refresh(); },
       setSequence(value) {
         sequence = value; button.disabled = !sequence;

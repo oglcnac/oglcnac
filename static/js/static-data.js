@@ -310,6 +310,39 @@
 
   window.OglcnacStaticData = {
     loadAtlasDeliveryManifest: () => loadJson("/static/data/atlas-v2/manifest.json?v=47dea0f711b0be20"),
+    async loadSiteAnnotations(accession) {
+      const manifest=await loadJson('/static/data/site-context-v1/manifest.json?v=25693d1a7dd5ce8e');
+      const bucket=await loadJson('/static/data/site-context-v1/proteins/'+accessionBucket(accession)+'.json?v='+manifest.revision);
+      return bucket[accession];
+    },
+    async loadProteomics(accession) {
+      const manifest=await loadJson('/static/data/site-context-v1/proteomics/manifest.json?v=e61b9a2bd114c93d');
+      const file=accessionBucket(accession)+'.json';
+      const records=await loadJson('/static/data/site-context-v1/proteomics/'+file+'?v='+manifest.sha256[file]);
+      return records[accession];
+    },
+    async loadOmaGroup(accession) {
+      const manifest=await loadJson('/static/data/site-context-v1/oma/manifest.json?v=dbefaff0dd8fd99e');
+      const file=accessionBucket(accession)+'.json';
+      const records=await loadJson('/static/data/site-context-v1/oma/'+file+'?v='+manifest.sha256[file]);
+      return {record:records[accession],release:manifest.release};
+    },
+    async loadOmaAlignment(accession) {
+      const manifest=await loadJson('/static/data/site-context-v1/oma-alignments/manifest.json?v=31bf94c54fe96d42');
+      const file=accessionBucket(accession)+'.json';
+      const records=await loadJson('/static/data/site-context-v1/oma-alignments/'+file+'?v='+manifest.sha256[file]);
+      return records[accession];
+    },
+    async loadConservation(accession) {
+      const manifest=await loadJson('/static/data/site-context-v1/conservation/manifest.json?v=9656f0dfbeb444f8');
+      const file=accessionBucket(accession)+'.json';
+      const records=await loadJson('/static/data/site-context-v1/conservation/'+file+'?v='+manifest.sha256[file]);
+      return {protein:records[accession],manifest};
+    },
+    async loadPhysicalPartners(accession) {
+      const manifest=await loadJson('/static/data/site-context-v1/partners/manifest.json?v=8dd47dbc507ccc0b');
+      return loadJson('/static/data/site-context-v1/partners/'+accessionBucket(accession)+'.json?v='+manifest.source_sha256+manifest.pin_sha256);
+    },
     loadAtlasProjection,
     resolveAtlasAccessions,
     loadAtlasRecords,

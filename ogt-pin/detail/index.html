@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=8c746ea4ba19655c">
+  <link rel="stylesheet" href="/static/css/app.css?v=c4f17cdf9e455014">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -113,12 +113,15 @@
     <h1 id="interactome-title">Find an interaction record</h1>
     <p class="record-subtitle">Curated interaction evidence with OGT.</p>
     <dl class="record-identity" id="ogt-identity" hidden><div><dt>Protein</dt><dd id="ogt-protein-name"></dd></div><div><dt>Species</dt><dd id="ogt-species"></dd></div><div><dt>Gene</dt><dd id="ogt-gene-name"></dd></div><div><dt>Partner</dt><dd id="ogt-partner"></dd></div></dl>
-    <div class="record-actions" id="ogt-record-actions" hidden><button type="button" id="ogt-download-record">Download complete record</button><a id="ogt-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#ogt-publications">Source publications</a><a id="pin-atlas" hidden></a></div>
+    <div class="record-actions" id="ogt-record-actions" hidden><button type="button" id="ogt-download-record">Download complete record</button><a id="ogt-uniprot-link" href="https://www.uniprot.org/">View in UniProt <span aria-hidden="true">↗</span></a><a href="#ogt-publications">Source publications</a><a id="pin-atlas" hidden></a><a id="pin-atlas-sites" hidden>Filter sites on this interactor</a></div>
    </header>
    <section class="detail-section" id="ogt-evidence" hidden><div class="detail-section-heading"><h2>Interaction evidence</h2></div><p class="record-section-note">Evidence retains its detection method, source, and curator annotations. An OGT interaction does not establish a modification site.</p>
     <details id="pin-filter" class="figure-export"><summary>Filter interaction evidence</summary><div class="record-actions"></div></details><p id="pin-filter-summary" role="status"></p>
     <div class="table-scroll" tabindex="0" role="region" aria-label="OGT-PIN interaction evidence table"><table class="table detail-table" id="interactome"><thead><tr><th>Interactor accession</th><th>Alternative identifier</th><th>Interaction detection method</th><th>PMID</th><th>Analytic throughput</th><th>Source</th><th>Curator comments</th><th>Meeting IMEx criteria</th><th>High-stringency interactor</th></tr></thead><tbody id="interactome-detail-rows"></tbody></table></div>
    </section>
+   <details id="pin-partners" class="detail-section figure-export" hidden><summary>Interaction partners in BioGRID</summary>
+     <p role="status"></p><label><input type="checkbox" data-replicated> Reported in two or more distinct publications</label><div class="table-scroll" tabindex="0" role="region" aria-label="BioGRID partner evidence"><table id="pin-partners-table"><thead><tr><th>Partner</th><th>Publications</th><th>Experimental systems</th><th>BioGRID records</th></tr></thead><tbody></tbody></table></div>
+   </details>
    <section class="detail-section record-publications" id="ogt-publications" hidden><div class="detail-section-heading"><h2>Source publications</h2></div><p id="ogt-publication-summary"></p><ul id="ogt-publication-list"></ul><a href="/citations/">How to cite OGT-PIN</a></section>
   </div>
  </div>
@@ -142,10 +145,10 @@
   </div>
 </footer>
 
-    <script src="/static/js/static-data.js?v=5f2ec7f886f47f6f"></script>
+    <script src="/static/js/static-data.js?v=dfd2d4bb0d924ce3"></script>
     <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
     <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
-    <script src="/static/js/ogt-record-evidence.js?v=c37af1c67e0cd899"></script>
+    <script src="/static/js/ogt-record-evidence.js?v=3167ef6f3036e2d9"></script>
     <script>
         const detailParams = new URLSearchParams(window.location.search);
         const detailPath = decodeURIComponent(window.location.pathname.split("/").filter(Boolean).pop() || "");

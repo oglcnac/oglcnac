@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=8c746ea4ba19655c">
+  <link rel="stylesheet" href="/static/css/app.css?v=c4f17cdf9e455014">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -86,6 +86,7 @@
       Select a species to explore its curated O-GlcNAc protein and site
       records.
     </p>
+    <div class="atlas-browse-controls">
     <div class="record-actions" aria-label="Browse view"><button type="button" id="browse-records" aria-pressed="true">Species records</button><button type="button" id="browse-sites" aria-pressed="false">Sites</button></div>
     <div class="species-filter" aria-label="Browse by species">
       <button type="button" data-species="Human">Human</button>
@@ -96,6 +97,7 @@
       <button type="button" data-species="C. Elegans">C. elegans</button>
       <button type="button" data-species="Others">Other species</button>
     </div>
+    </div>
   </div>
 </section>
 
@@ -104,9 +106,24 @@
   <div class="record-actions"><label>Species <select data-species-filter></select></label><label>Reported residue <select data-residue></select></label>
     <label><input type="checkbox" data-mut> Mutagenesis reported</label>
     <label><input type="checkbox" data-clear> Unambiguous assignment</label></div>
+  <details class="figure-export" data-more><summary>More filters</summary>
+    <label>Find gene, accession, site or nearby annotation <input type="search" data-annotation-search></label>
+    <div class="record-actions">
+      <label><input type="checkbox" data-context="peptide"> Unique peptide supports the reported position</label>
+      <label><input type="checkbox" data-context="phosphosite"> Phosphorylation at this residue</label>
+      <label><input type="checkbox" data-context="phospho"> Phosphorylation within 1–5 residues</label>
+      <label><input type="checkbox" data-context="acetyl"> Acetylation within 1–5 residues</label>
+      <label><input type="checkbox" data-context="ubiquitin"> Ubiquitination within 1–5 residues</label>
+      <label><input type="checkbox" data-context="pin"> Parent protein has low-throughput OGT-PIN evidence</label>
+      <label><input type="checkbox" data-context="observed"> Covered by a SIFTS observed PDB segment</label>
+      <label><input type="checkbox" data-context="verifiedpdb"> Reported residue observed in an experimental structure</label>
+    </div>
+    <p data-context-status role="status"></p>
+  </details>
+  <p data-protein-scope hidden></p>
   <p>Select up to six reported sites to compare evidence across proteins.</p>
   <section id="directory-comparison" hidden><h3>Compare site evidence</h3><div class="record-actions" data-chosen></div>
-    <button type="button" data-run disabled>Compare selected sites</button><p role="status"></p>
+    <button type="button" data-run disabled>Compare selected sites</button> <button type="button" data-share>Copy comparison link</button> <button type="button" data-export hidden>Download comparison CSV</button><p data-missing></p><p role="status"></p>
     <div class="table-scroll" data-output tabindex="0" role="region" aria-label="Cross-protein site evidence"></div></section>
   <p data-status role="status"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Filtered Atlas site directory"><table id="site-directory-table"><thead><tr><th>Accession</th><th>Reported site</th><th>Species</th><th>Matching records</th></tr></thead><tbody></tbody></table></div>
   </div></section>
@@ -152,7 +169,7 @@
   </div>
 </footer>
 
-<script src="/static/js/static-data.js?v=5f2ec7f886f47f6f"></script>
+<script src="/static/js/static-data.js?v=dfd2d4bb0d924ce3"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script>
   window.OglcnacStaticData.loadAtlasRelease().then(data=>{
@@ -232,8 +249,8 @@ if(atlasBrowseParams.get("view")!=="sites") loadBrowse(atlasBrowseParams.get("sp
 </script>
 
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
-<script src="/static/js/atlas-directory-compare.js?v=c21429f4509fb4f9"></script>
-<script src="/static/js/atlas-site-directory.js?v=8bf52d5a54145304"></script>
+<script src="/static/js/atlas-directory-compare.js?v=722e3fae6ccb53b0"></script>
+<script src="/static/js/atlas-site-directory.js?v=d1f83009f441509c"></script>
 
 </body>
 </html>

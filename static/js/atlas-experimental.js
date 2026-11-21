@@ -76,7 +76,7 @@ window.OglcnacExperimental = (() => {
         cancel();measure.disabled=false;status.textContent=message;
       };
       try {
-        worker=new Worker('/static/js/atlas-contact-worker.js?v=ffcc342884b13f10');
+        worker=new Worker('/static/js/atlas-contact-worker.js?v=597abfd8bd4f6a4e');
         worker.onerror=()=>finish('The coordinate reader could not run. Try again.');
         worker.onmessage=({data})=>{
           if(current!==revision)return;
@@ -86,7 +86,7 @@ window.OglcnacExperimental = (() => {
           const list=make('ul','');
           for(const r of data.rows){
             const distance=r.distance===null?'No other protein chain observed':'Closest other protein chain '+r.partner+' at '+r.distance.toFixed(2)+' Å ('+(r.distance<=5?'within':'outside')+' 5 Å)';
-            list.append(make('li','Chain '+r.chain+' · '+distance+' · DNA/RNA within 5 Å: '+(r.nucleic?'yes':'no')));
+            list.append(make('li','Chain '+r.chain+' · '+distance+' · Other polymer heavy atoms within 5 Å: '+r.partnerAtoms+' · DNA/RNA within 5 Å: '+(r.nucleic?'yes':'no')));
           }
           out.append(list);
           finish(site.residue+site.position+' · '+pdb.toUpperCase()+' · biological assembly 1. Distances are from the side-chain oxygen to observed heavy atoms on other polymer chains, including symmetry copies and chains from any species. Model 1, positive occupancy and primary alternate coordinates.');

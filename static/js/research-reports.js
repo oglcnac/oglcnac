@@ -7,8 +7,21 @@
   async function protein(context){
     const manifest=await provenance(),papers=await citations(context.allRecords),sequenceHash=context.sequence?await R.sha256(context.sequence):null;
     const files={'source-evidence.json':pretty(context.allRecords),'source-evidence.csv':R.csv(context.allRecords),'filtered-evidence.json':pretty(context.filteredRecords),'filtered-evidence.csv':R.csv(context.filteredRecords),'parameters.json':pretty({filters:context.filters,selected_position:context.position,source_url:context.url}),'citations.json':pretty(papers),'dataset-manifest.json':pretty(manifest),'annotations.json':pretty(context.annotation)};
+    if(context.modelMeasurement)files['structure-measurements.json']=pretty(context.modelMeasurement);
+    const loaders={
+      'entry-modifications':()=>root.OglcnacStaticData.loadSiteAnnotations(context.accession),
+      'proteomics-observations':()=>root.OglcnacStaticData.loadProteomics(context.accession),
+      'oma-group-alignments':()=>root.OglcnacStaticData.loadOmaAlignment(context.accession),
+      'oma-group':()=>root.OglcnacStaticData.loadOmaGroup(context.accession),
+      'ortholog-alignments':()=>root.OglcnacStaticData.loadConservation(context.accession).then(v=>({protein:v.protein,ensembl_release:v.manifest.ensembl_release,panels:v.manifest.panels})),
+      'physical-partners':()=>root.OglcnacStaticData.loadPhysicalPartners(context.accession).then(v=>({release:v.release,partners:v.accessions[context.accession]}))
+    };
+    await Promise.all(Object.entries(loaders).map(async ([name,load])=>{
+      try {files[name+'.json']=pretty((await load())??{status:'unassessed'});}
+      catch {files[name+'.json']=pretty({status:'unavailable'});}
+    }));
     if(context.sequence)files['sequence.fasta']=context.sequence_source?.kind==='uniprot-fallback'&&context.fasta?context.fasta.trim()+'\n':R.fasta([{accession:context.accession,sequence:context.sequence}]);
-    return R.report({kind:'atlas-protein',metadata:{accession:context.accession,source_url:context.url,dataset_revision:manifest.revision,scope:{complete_records:context.allRecords.length,filtered_records:context.filteredRecords.length,filters:context.filters,selected_position:context.position},sequence:{available:!!context.sequence,sha256:sequenceHash,source:context.sequence_source},annotations:context.annotation.state,citation_metadata:papers.status,model:'Not applicable: experimental Atlas records'},files});
+    return R.report({kind:'atlas-protein',metadata:{accession:context.accession,source_url:context.url,dataset_revision:manifest.revision,scope:{complete_records:context.allRecords.length,filtered_records:context.filteredRecords.length,filters:context.filters,selected_position:context.position},sequence:{available:!!context.sequence,sha256:sequenceHash,source:context.sequence_source},annotations:context.annotation.state,citation_metadata:papers.status,model:context.modelMeasurement?.model||'Experimental Atlas records'},files});
   }
   async function captureWorkbench({records,atlas,ogtPin,model,modelText,snapshot,fasta,species,started_at,preparation}){
     const accessions=new Set(records.map(record=>root.OglcnacWorkbenchCore.uniprotAccession(record.id)).filter(Boolean));

@@ -72,7 +72,7 @@
   function create(element, options) {
     const records = options.records;
     let model = summarize(records), selected = null, view = "full", fasta = "", sequencePending = true;
-    let evidenceRecords = records, evidenceModel = model;
+    let evidenceRecords = records, evidenceModel = model, annotationPositions = [];
     const getSite = () => model.sites.find(site => site.position === selected);
     const querySite = () => position(new browser.URL(browser.location.href).searchParams.get("site"));
     const requested = querySite();
@@ -175,6 +175,7 @@
       svg.append(svgNode("line", { x1: 12, x2: width - 12, y1: 24, y2: 24, class: "protein-map-axis" }));
       const candidates = evidenceModel.sites.filter(site => site.mapped);
       for (const candidate of candidates) svg.append(svgNode("rect", { x: x(candidate.position) - 1.5, y: candidate.position === selected ? 10 : 18, width: 3, height: candidate.position === selected ? 28 : 12, class: "protein-map-site" }));
+      for (const pos of annotationPositions) svg.append(svgNode("circle", {cx:x(pos),cy:36,r:2.5,fill:"none",stroke:"#80512e","stroke-width":1.5}));
       const count = length < 4 ? length : width < 450 ? 3 : 5;
       for (let index = 0; index < count; index++) {
         const coordinate = 1 + Math.round((length - 1) * index / Math.max(1, count - 1));
@@ -295,6 +296,7 @@
     return {
       setSequence(value) { fasta = value || ""; sequencePending = false; model = summarize(records, sequenceFromFasta(fasta)); evidenceModel = summarize(evidenceRecords, model.sequence); populatePositions(); render(); notify(); },
       setEvidence(rows) { evidenceRecords = rows; evidenceModel = summarize(rows, model.sequence); populatePositions(); render(); },
+      setModificationOverlay(positions) { annotationPositions=positions; drawOverview(); },
       select: choose,
       getViewRange() { const width=el("tracks").getBoundingClientRect().width;const half=Math.max(8,Math.min(36,Math.floor((width-28)/20)));return view==="region"&&getSite()?.mapped?{start:Math.max(1,selected-half),end:Math.min(model.sequence.length,selected+half)}:{start:1,end:model.sequence.length}; },
       getSelection() { return selected; },
