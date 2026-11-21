@@ -5293,3 +5293,7 @@ html { scroll-padding-top:120px; }
 #protein-text-search li{margin:.65rem 0}
 @media(max-width:540px){#site-record dl{grid-template-columns:minmax(5.5rem,36%) minmax(0,1fr)}}
 #protein-text-search mark{display:inline-block;line-height:1.35;max-width:100%;background:#fff0b8;color:inherit}
+
+#site-directory .atlas-evidence-states{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:.75rem 1rem;align-items:stretch}
+#site-directory .atlas-evidence-states label{display:flex;flex-direction:column;justify-content:space-between;align-items:stretch;text-align:left;gap:.25rem}
+.atlas-evidence-states select{width:100%}

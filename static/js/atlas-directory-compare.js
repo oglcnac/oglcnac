@@ -56,7 +56,7 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
       try {context=await comparisonEvidence(sites);} catch {context=new Map();}
       if(current!==revision)return;
       const table=document.createElement('table'),head=table.createTHead().insertRow();
-      for(const field of ['Site','Source records','Publications','Unambiguous records','Reported methods','Rows with unique peptide support','Phosphorylation at residue','Nearby phosphorylation','Nearby acetylation','Nearby ubiquitination','Parent protein low-throughput OGT-PIN evidence','Observed PDB segment entries','Confirmed PDB entries','Site pLDDT','Peptide outcomes']) head.append(make('th',field));
+      for(const field of ['Site','Source records','Publications','Unambiguous records','Reported methods','Rows with unique peptide support','Phosphorylation at residue','Nearby phosphorylation','Nearby acetylation','Nearby ubiquitination','Parent protein low-throughput OGT-PIN evidence','Observed PDB segment entries','Confirmed PDB entries','Site pLDDT','Mean pLDDT (±5)','Modeled residues in window','AlphaFold model','Peptide outcomes']) head.append(make('th',field));
       const body=table.createTBody();
       for(const s of sites){
         const rows=records.filter(r=>r.accession===s.id && Number(r.position_in_protein)===s.pos &&
@@ -78,6 +78,9 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
         tr.insertCell().textContent=Number.isInteger(flags?.[6])?flags[6]:'Unassessed';
         tr.insertCell().textContent=review?.pdb??'Unassessed';
         tr.insertCell().textContent=review?.score??'Unassessed';
+        tr.insertCell().textContent=review?.window?.[0]??'Unassessed';
+        tr.insertCell().textContent=review?.window?.[1]??'Unassessed';
+        tr.insertCell().textContent=review?.model?.join(' v')??'Unassessed';
         tr.insertCell().textContent=review?.peptides.join(' · ')||'Unassessed';
       }
       output.append(table);download.hidden=false;status.textContent='Complete evidence for the selected sites, in selection order.';

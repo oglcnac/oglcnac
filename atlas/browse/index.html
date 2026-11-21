@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=f05184c1404e984e">
+  <link rel="stylesheet" href="/static/css/app.css?v=a4ce33556037b912">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -110,13 +110,16 @@
     <label>Find gene, accession, site or nearby annotation <input type="search" data-annotation-search></label>
     <div class="record-actions">
       <label><input type="checkbox" data-context="peptide"> Unique peptide supports the reported position</label>
-      <label><input type="checkbox" data-context="phosphosite"> Phosphorylation at this residue</label>
-      <label><input type="checkbox" data-context="phospho"> Phosphorylation within 1–5 residues</label>
-      <label><input type="checkbox" data-context="acetyl"> Acetylation within 1–5 residues</label>
-      <label><input type="checkbox" data-context="ubiquitin"> Ubiquitination within 1–5 residues</label>
-      <label><input type="checkbox" data-context="pin"> Parent protein has low-throughput OGT-PIN evidence</label>
-      <label><input type="checkbox" data-context="observed"> Covered by a SIFTS observed PDB segment</label>
-      <label><input type="checkbox" data-context="verifiedpdb"> Reported residue observed in an experimental structure</label>
+    </div>
+    <div class="record-actions atlas-evidence-states">
+      <label>Site has low-throughput or mutagenesis evidence<select data-evidence-state="direct"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Phosphorylation at this residue<select data-evidence-state="phosphosite"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Phosphorylation within 1–5 residues<select data-evidence-state="phospho"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Acetylation within 1–5 residues<select data-evidence-state="acetyl"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Ubiquitination within 1–5 residues<select data-evidence-state="ubiquitin"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Parent protein has low-throughput OGT-PIN evidence<select data-evidence-state="pin"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Covered by a SIFTS observed PDB segment<select data-evidence-state="observed"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
+      <label>Reported residue observed in an experimental structure<select data-evidence-state="verifiedpdb"><option value="">Any</option><option value="1">Reported</option><option value="0">No match in checked source</option><option value="unknown">Unassessed</option></select></label>
     </div>
     <div class="record-actions"><label>Peptide outcome <select data-outcome><option value="">Any outcome</option></select></label>
       <label>Model confidence <select data-band><option value="">Any confidence</option><option>Very high</option><option>Confident</option><option>Low</option><option>Very low</option><option>Unavailable</option></select></label></div>
@@ -254,8 +257,8 @@ if(atlasBrowseParams.get("view")!=="sites") loadBrowse(atlasBrowseParams.get("sp
 </script>
 
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
-<script src="/static/js/atlas-directory-compare.js?v=7ba28ff6406c29e9"></script>
-<script src="/static/js/atlas-site-directory.js?v=c50cb103371ba35d"></script>
+<script src="/static/js/atlas-directory-compare.js?v=49fe533d4c81e79f"></script>
+<script src="/static/js/atlas-site-directory.js?v=61c8a84b314f0370"></script>
 
 </body>
 </html>

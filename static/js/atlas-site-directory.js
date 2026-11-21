@@ -21,7 +21,22 @@
   for(const tag of tags)outcome.add(new Option(tag,tag));
   const confidence=value=>value==null?'Unavailable':value>=90?'Very high':value>=70?'Confident':value>=50?'Low':'Very low';
   const term=find('annotation-search');
-  const controls = [...root.querySelectorAll('[data-context]')];
+  const peptide=find('context');
+  const states=[...root.querySelectorAll('[data-evidence-state]')];
+  const controls=[peptide,...states];
+  const columns={phosphosite:1,phospho:2,acetyl:3,ubiquitin:4,pin:5,observed:6};
+  function evidenceState(key,row,i,group){
+    if(!context || !review)return null;
+    if(key==='direct')return review.get(row)[5][group];
+    if(key==='verifiedpdb'){
+      const [, ,confirmed,checked]=review.get(row);
+      const segments=context[i][6];
+      if(!Number.isInteger(segments) || !/^[STY]$/.test(row[3]))return null;
+      return confirmed>0?1:checked===segments?0:null;
+    }
+    const value=context[i][columns[key]];
+    return Number.isInteger(value)?Number(value>0):null;
+  }
   const more = find('more');
   async function loadContext() {
     const [response,details] = await Promise.all([fetch('/static/data/site-context-v1/flags.json?v=12f26055f329a202'),OglcnacStaticData.loadReviewIndex('directory.json')]);
@@ -49,7 +64,7 @@
       const key=JSON.stringify(row.slice(0,4));
       if(wanted.has(key)){
         const [masks,score]=review.get(row);
-        result.set(key,{flags:context[i],score,pdb:pdbCount(row).text,
+        result.set(key,{flags:context[i],score,window:review.get(row)[4],model:review.get(row)[6],pdb:pdbCount(row).text,
           peptides:outcomes.filter((_,bit)=>masks[0] & (1<<bit))});
       }
     });
@@ -72,7 +87,7 @@
   const speciesName = value => value.charAt(0).toUpperCase()+value.slice(1);
   function matchesOutcome(mask){
     if(outcome.value==='mixed outcomes')return Boolean(mask & (mask-1));
-    if(controls[0].checked && outcome.value!=='supports position')return false;
+    if(peptide.checked && outcome.value!=='supports position')return false;
     return Boolean(mask & (1<<outcomes.indexOf(outcome.value)));
   }
   function render() {
@@ -80,8 +95,8 @@
     const index = 4 + Number(mut) + 2*Number(clear);
     const search=term.value.trim().toLowerCase();
     const matches = rows.filter((row,i) => (!accession || accession===row[1]) && (!band.value || (review && confidence(review.get(row)[1])===band.value)) &&
-      (!outcome.value || (review && matchesOutcome(review.get(row)[0][index-4]))) && (!search || (context && [row[1],String(row[3])+row[2],texts[context[i].at(-1)]].join(' ').toLowerCase().includes(search))) && controls.every((el,j)=>!el.checked ||
-      (j===0 ? context?.[i][0][index-4]>0 : j===7 ? review?.get(row)[2]>0 && context?.[i][6]>0 : context?.[i][j]>0)) && row[index] && (!species.value || row[0] === species.value) &&
+      (!outcome.value || (review && matchesOutcome(review.get(row)[0][index-4]))) && (!search || (context && [row[1],String(row[3])+row[2],texts[context[i].at(-1)]].join(' ').toLowerCase().includes(search))) && (!peptide.checked || context?.[i][0][index-4]>0) &&
+      states.every(el=>!el.value || (context && (String(evidenceState(el.dataset.evidenceState,row,i,index-4)??'unknown')===el.value))) && row[index] && (!species.value || row[0] === species.value) &&
       (!residue.value || (row[3] || 'Unreported') === residue.value));
     const query = new URLSearchParams({view:'sites'});
     if(table.filterInput.value)query.set('q',table.filterInput.value);
@@ -89,7 +104,8 @@
     if(band.value)query.set('band',band.value);
     if(outcome.value)query.set('outcome',outcome.value);
     if(search)query.set('annotation',term.value.trim());
-    for(const el of controls) if(el.checked) query.set(el.dataset.context,'1');
+    if(peptide.checked)query.set('peptide','1');
+    for(const el of states)if(el.value)query.set(el.dataset.evidenceState,el.value);
     for(const key of new URLSearchParams(location.search).getAll('sel'))query.append('sel',key);
     if(species.value) query.set('species',species.value);
     if(residue.value) query.set('residue',residue.value);
@@ -139,10 +155,14 @@
         const response=await fetch('/static/data/atlas-sites-v1.json?v=5f22487a85f20ec4');
         if(!response.ok)throw Error();
         rows=await response.json();
-        for(const el of controls) el.checked=params.get(el.dataset.context)==='1';
+        peptide.checked=params.get('peptide')==='1';
+        for(const el of states){
+          const value=params.get(el.dataset.evidenceState);
+          el.value=['1','0','unknown'].includes(value)?value:'';
+        }
         term.value=params.get('annotation')||'';
         outcome.value=params.get('outcome')||'';band.value=params.get('band')||'';
-        if(outcome.value || band.value || term.value || controls.some(el=>el.checked)) more.open=true;
+        if(outcome.value || band.value || term.value || peptide.checked || states.some(el=>el.value)) more.open=true;
         loading ??= loadContext();
         try { await loading; } catch {find('context-status').textContent='Supplementary evidence unavailable. Reopen More filters to retry.';} finally {loading=null;}
         compare.restore(rows,params);

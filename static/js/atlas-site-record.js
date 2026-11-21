@@ -32,7 +32,7 @@ window.OglcnacSiteRecord = function(root, accession, records) {
     const counts=new Map();
     for(const outcome of Object.values(row.peptide_outcomes))counts.set(outcome,(counts.get(outcome)||0)+1);
     find('peptides').textContent=[...counts].map(([k,v])=>k+' ('+v+')').join(' · ');
-    find('confidence').textContent=row.model?row.model[0]+' pLDDT · '+row.model[1]+' v'+row.model[2]:'Unavailable in this release';
+    find('confidence').textContent=row.model?row.model[0]+' pLDDT at site · '+row.plddt_window[0]+' mean across '+row.plddt_window[1]+' modeled residues (±5) · '+row.model[1]+' v'+row.model[2]:row.atlas_window?.[0]===row.residue?'No sequence-matched model confidence for this position.':'Reported residue could not be verified on the Atlas sequence.';
     const neighbors=protein.filter(other=>other.species===row.species && other.position!==position)
       .sort((a,b)=>Math.abs(a.position-position)-Math.abs(b.position-position)||a.position-b.position||a.residue.localeCompare(b.residue)).slice(0,10);
     find('neighbors').replaceChildren(...neighbors.map(other=>{
