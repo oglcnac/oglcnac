@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
   <meta name="robots" content="noindex, follow">
 
-  <link rel="stylesheet" href="/static/css/app.css?v=b5dc12c5bf5f6190">
+  <link rel="stylesheet" href="/static/css/app.css?v=21cb8d2166379906">
   <script src="/static/js/site-ui.js?v=998d2b4b680fb620" defer></script>
 
 </head>
@@ -107,6 +107,18 @@
    <section class="detail-section" id="atlas-landscape" hidden>
     <div class="detail-section-heading"><h2>Modification landscape</h2><a href="/atlas/tutorial/#protein-map">About this map</a></div>
     <div id="atlas-protein-viewer"></div><details id="atlas-figure-export" class="figure-export"></details>
+    <details id="atlas-sites" class="figure-export">
+      <summary>Sites on this protein <span data-count></span></summary>
+      <p data-note></p>
+      <div class="record-actions">
+        <label>Order by <select data-sort><option value="position">Sequence position</option><option value="records">Most records</option><option value="papers">Most publications</option><option value="clear">Most publications with unambiguous assignments</option></select></label>
+        <button type="button" data-compare disabled>Compare selected sites</button>
+        <button type="button" data-clear hidden>Clear selection</button>
+      </div>
+      <div data-result></div>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Sites on this protein"><table><thead><tr><th>Select</th><th>Site</th><th>Records</th><th>Publications</th><th>Publications with unambiguous assignments</th></tr></thead><tbody></tbody></table></div>
+      <div class="record-actions" data-pager hidden><button type="button" data-prev>Previous</button><span data-page></span><button type="button" data-next>Next</button></div>
+    </details>
     <section id="atlas-structure" aria-labelledby="atlas-structure-title" style="margin-block:1.75rem;border-top:1px solid #d6dfe7;padding-top:1rem">
       <h3 id="atlas-structure-title">Predicted 3D structure</h3>
       <p>Explore a reported site in its AlphaFold model. The local confidence score (pLDDT) describes the predicted coordinates.</p>
@@ -150,6 +162,7 @@
 <script src="/static/js/static-data.js?v=5e7e4c999f178dfc"></script>
 <script src="/static/js/table-utils.js?v=c67690e9b785e639"></script>
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
+<script src="/static/js/atlas-site-comparison.js?v=185c405bf2f17077"></script>
 <script src="/static/js/atlas-structure.js?v=4dcf279d8e5e2a44"></script>
 <script src="/static/js/protein-viewer.js?v=6af07fd26be0d377"></script>
 <script src="/static/js/atlas-evidence.js?v=e198ab17c980c760"></script>
@@ -271,6 +284,7 @@
   let atlasFasta = '';
   let atlasEvidenceController, atlasFeatureViewer, atlasLoadGeneration = 0;
   let atlasAppliedRows, atlasAppliedBase;
+  const atlasSiteList = OglcnacSiteComparison.create(document.getElementById('atlas-sites'));
   const sameAtlasRows = (a, b) => a && a.length === b.length && a.every((row, index) => row === b[index]);
   const atlasView = window.OglcnacRecordView;
   document.querySelector('.record-section-nav details').open = matchMedia('(min-width: 901px)').matches;
@@ -316,6 +330,7 @@
     if (!sameAtlasRows(atlasAppliedBase, selection.baseRecords)) {
       atlasProteinViewer?.setEvidence(selection.baseRecords);
       atlasAppliedBase = selection.baseRecords;
+      atlasSiteList.update(atlasAppliedBase, atlasProteinViewer?.getSequence() || '');
     }
     document.querySelectorAll('[data-atlas-selection-note]').forEach(note => {
       note.hidden = !selection.position && !selection.active; note.replaceChildren();
@@ -436,6 +451,7 @@
     atlasProteinViewer.setSequence(atlasFasta);
     atlasFeatureViewer.setSequence(sequence);
     atlasStructure.setSequence(sequence);
+    atlasSiteList.update(atlasAppliedBase || [], sequence);
   }
 
   async function loadAtlasDetail() {
@@ -446,6 +462,7 @@
     atlasFeatureViewer?.destroy(); atlasFeatureViewer = null;
     atlasFasta = '';
     atlasAppliedRows = atlasAppliedBase = null;
+    atlasSiteList.update([], '');
     document.getElementById('atlas-download-fasta').disabled = true;
     document.getElementById('atlas-copy-fasta').disabled = true;
     retryRecord.hidden = true;

@@ -5170,6 +5170,16 @@ html { scroll-padding-top:120px; }
 .section-body .atlas-review-columns>section { padding:0; }
 .section-body #collection-content { padding-top:0; }
 
+#atlas-sites { margin-block: 1rem; }
+#atlas-sites summary { min-height: 44px; }
+#atlas-sites .record-actions { align-items: end; margin-block: .75rem; }
+#atlas-sites .record-actions label { display: grid; gap: .25rem; max-width: 100%; }
+#atlas-sites select { max-width: 100%; min-height: 44px; }
+#atlas-sites .site-select { display: inline-grid; width: 44px; height: 44px; place-items: center; cursor: pointer; }
+#atlas-sites .site-select input { width: 18px; height: 18px; margin: 0; }
+#atlas-sites [data-result]:not(:empty) { margin-block: 1rem; }
+#atlas-sites caption { text-align: left; font-weight: 650; padding: .5rem; }
+
 /* Research workflows share the established Atlas typography and colors. */
 .atlas-autocomplete{position:relative;min-width:0}
 .atlas-suggestion-status{font-size:.76rem;line-height:1.45;color:#526575;margin:.35rem 0 0}
