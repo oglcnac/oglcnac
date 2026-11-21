@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=c4f17cdf9e455014">
+  <link rel="stylesheet" href="/static/css/app.css?v=faefab21c98bf89b">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -122,10 +122,12 @@
   </details>
   <p data-protein-scope hidden></p>
   <p>Select up to six reported sites to compare evidence across proteins.</p>
-  <section id="directory-comparison" hidden><h3>Compare site evidence</h3><div class="record-actions" data-chosen></div>
+  <section id="directory-comparison" hidden><h3>Compare site evidence</h3>
+    <label class="comparison-site-search">Add a site <input type="search" data-add-site placeholder="Gene, accession or site (e.g. GAPDH S210)" autocomplete="off"></label>
+    <div data-add-results></div><p data-add-status role="status"></p><div class="record-actions" data-chosen></div>
     <button type="button" data-run disabled>Compare selected sites</button> <button type="button" data-share>Copy comparison link</button> <button type="button" data-export hidden>Download comparison CSV</button><p data-missing></p><p role="status"></p>
     <div class="table-scroll" data-output tabindex="0" role="region" aria-label="Cross-protein site evidence"></div></section>
-  <p data-status role="status"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Filtered Atlas site directory"><table id="site-directory-table"><thead><tr><th>Accession</th><th>Reported site</th><th>Species</th><th>Matching records</th></tr></thead><tbody></tbody></table></div>
+  <p data-status role="status"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Filtered Atlas site directory"><table id="site-directory-table"><thead><tr><th>Accession</th><th>Reported site</th><th>Species</th><th>Matching records</th><th>Studies (distinct PMIDs)</th></tr></thead><tbody></tbody></table></div>
   </div></section>
 <section id="browse-record-results" class="table-results-section" aria-labelledby="atlas-browse-results-heading">
   <div class="container">
@@ -249,8 +251,8 @@ if(atlasBrowseParams.get("view")!=="sites") loadBrowse(atlasBrowseParams.get("sp
 </script>
 
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
-<script src="/static/js/atlas-directory-compare.js?v=722e3fae6ccb53b0"></script>
-<script src="/static/js/atlas-site-directory.js?v=d1f83009f441509c"></script>
+<script src="/static/js/atlas-directory-compare.js?v=d1504ebaf155672c"></script>
+<script src="/static/js/atlas-site-directory.js?v=4e1e83331f36db2c"></script>
 
 </body>
 </html>

@@ -1,0 +1,29 @@
+column,type,definition
+species,text,"Species label from the Atlas, normalized to lowercase."
+accession,text,"Reported protein accession, including any isoform suffix."
+position,integer,One-based residue position reported in the Atlas.
+residue,text,Reported residue label. Blank if the source did not specify a residue.
+records,integer,"Atlas records sharing this species, accession, position and residue."
+unique_peptide_support,integer,Records whose peptide has a unique sequence match and whose peptide offset supports the reported position.
+sequence_check,category,"verified, conflict or unassessed against the Atlas sequence snapshot."
+same_site_phosphorylation,flag,UniProt phosphorylation annotation at the reported residue.
+nearby_phosphorylation,flag,UniProt phosphorylation annotation one to five residues away.
+nearby_acetylation,flag,UniProt acetylation annotation one to five residues away.
+nearby_ubiquitination,flag,UniProt ubiquitin acceptor cross-link one to five residues away.
+protein_low_throughput_pin,flag,Low-throughput OGT-PIN evidence for the same accession and organism.
+observed_segment_entries,integer,Distinct PDB entries with an observed SIFTS segment spanning the coordinate. Segment coverage alone does not confirm the deposited residue.
+observed_pdb_example,text,One PDB entry with confirmed residue identity and observation. Blank when no example was verified.
+observed_pdb_chain,text,Deposited chain identifier for the verified PDB example.
+observed_pdb_residue,text,"Residue identifier in the deposited chain, including its insertion code when present."
+ortholog_species_aligned,integer,Compara panel species with one eligible one-to-one ortholog and an assessable target residue.
+ortholog_exact,integer,Eligible Compara species with the same amino acid at the aligned position.
+ortholog_compatible,integer,"Eligible Compara species with S or T aligned to an S/T site, or an exact match for another residue."
+window_identical,integer,Identical aligned residue pairs summed over eligible Compara species in the site-centered ±5 window.
+window_compared,integer,Comparable aligned residue pairs in those windows. Denominator for window_identical.
+oma_entry,text,Unique same-taxon OMA protein cross-reference.
+oma_group,integer,"Strict OMA group identifier for the parent protein, when available."
+oma_species_aligned,integer,Reference species with an assessable target residue in a unique supplementary OMA group alignment.
+oma_residue_exact,integer,Assessed OMA reference species with the same amino acid at the aligned position.
+nearby_proteomics_datasets,integer,"Distinct identified proteomics datasets mapped within five residues, including the site."
+biogrid_physical_partners,integer,Distinct same-species physical partners of the matched parent gene product in BioGRID.
+biogrid_partners_multiple_publications,integer,Physical partners supported by at least two distinct PubMed identifiers.

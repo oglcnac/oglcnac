@@ -24,6 +24,10 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
   };
   function sync(persist=true) {
     if(persist)saveSelection();
+    suggestions.replaceChildren();
+    search.value='';
+    search.disabled=chosen.size+missing.size>=6;
+    feedback.textContent=search.disabled?'Six sites selected. Remove a site to add another.':'';
     download.hidden=true;
 
     revision++;output.replaceChildren();status.textContent='';
@@ -40,7 +44,7 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
       remove.setAttribute('aria-label','Remove '+s.id+' '+s.name);remove.onclick=()=>{chosen.delete(key);sync();};
       chips.append(remove);
     }
-    for(const box of document.querySelectorAll('#site-directory-table [data-site-key]')){
+    for(const box of document.querySelectorAll('#site-directory [data-site-key]')){
       box.checked=chosen.has(box.dataset.siteKey);box.disabled=!box.checked && chosen.size+missing.size>=6;
     }
   }
@@ -76,7 +80,40 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
     }catch{if(current===revision)status.textContent='Evidence unavailable. Select Compare to retry.';}
     finally{if(current===revision)button.disabled=chosen.size<2;}
   };
+  const search=panel.querySelector('[data-add-site]');
+  const suggestions=panel.querySelector('[data-add-results]');
+  const feedback=panel.querySelector('[data-add-status]');
+  let directory=[];
+  search.addEventListener('input',()=>{
+    suggestions.replaceChildren();
+    feedback.textContent='';
+    const tokens=search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if(!tokens.length)return;
+    let displayed=0;
+    for(const row of directory){
+      const [species,id,pos,aa]=row;
+      const key=JSON.stringify(row.slice(0,4));
+      const name=/^[A-Z]$/.test(aa)?aa+pos:'Position '+pos+(aa?' (reported: '+aa+')':'');
+      const genes=row[12];
+      const label=[id,name,genes,species].filter(Boolean).join(' · ');
+      if(chosen.has(key) || !tokens.every(token=>label.toLowerCase().includes(token)))continue;
+      const add=make('button',label);
+      add.type='button';
+      add.onclick=()=>{
+        if(chosen.size+missing.size>=6)return;
+        chosen.set(key,{species,id,pos,aa,name});
+        search.value='';
+        sync();
+        if(!search.disabled)search.focus();
+        else button.focus();
+      };
+      suggestions.append(add);
+      if(++displayed===8)break;
+    }
+    feedback.textContent=displayed?'Showing '+displayed+(displayed===1?' matching site.':' matching sites.'):'No matching sites available to add.';
+  });
   function restore(rows,params){
+    directory=rows;
     const keys=[...new Set(params.getAll('sel'))].slice(0,6);
     if(!keys.length)return;
     const available=new Map(rows.map(row=>[JSON.stringify(row.slice(0,4)),row]));

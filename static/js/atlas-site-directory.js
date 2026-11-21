@@ -83,7 +83,7 @@
       if(clear)detail.set('ambiguity','unambiguous');
       const link = '/atlas/detail/?'+detail+(mut?'#atlas-publications':'#atlas-landscape');
       const siteName=/^[A-Z]$/.test(aa)?aa+pos:'Position '+pos+(aa?' (reported: '+aa+')':'');
-      return [{text:id,href:link},{text:siteName,render:cell=>compare.cellRenderer(cell,{id,pos,aa,species:organism,name:siteName,link})},speciesName(organism),counts[index-4]];
+      return [{text:id,href:link},{text:siteName,render:cell=>compare.cellRenderer(cell,{id,pos,aa,species:organism,name:siteName,link})},speciesName(organism),counts[index-4],counts[index]];
     }),{preserveState:true});
     find('status').textContent = matches.length.toLocaleString()+(matches.length===1?' reported site entry.':' reported site entries.')+' Filters apply to the same source record.';
   }
@@ -101,12 +101,12 @@
     siteButton.setAttribute('aria-pressed',String(sites));recordButton.setAttribute('aria-pressed',String(!sites));
     if(!sites){loadBrowse(species.value || params.get('species') || 'Human');return;}
 
-    if(!table) table=OglcnacTables.create('site-directory-table',{filename:'atlas-sites.csv',mobileColumns:[0,1,2,3]});
+    if(!table) table=OglcnacTables.create('site-directory-table',{filename:'atlas-sites.csv',mobileColumns:[0,1,2,3,4]});
     if(!rows){
       table.filterInput.value=params.get('q')||'';
       find('status').textContent='Loading the current site directory…';
       try {
-        const response=await fetch('/static/data/atlas-sites-v1.json?v=6c5bcf7a19b87aad');
+        const response=await fetch('/static/data/atlas-sites-v1.json?v=5f22487a85f20ec4');
         if(!response.ok)throw Error();
         rows=await response.json();
         for(const el of controls) el.checked=params.get(el.dataset.context)==='1';
