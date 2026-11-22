@@ -58,7 +58,7 @@ window.OglcnacSiteRecord = function(root, accession, records) {
       confirmed+' confirmed PDB entries · '+row.checked_candidates+' of '+candidates+' candidate entries checked.';
     const limits=find('limits'), reasons=[];
     if(numbering.some(item=>item.status==='unresolved')){
-      const a=node('a','Review the unresolved isoform coordinates.');a.href='#site-numbering';reasons.push(a);
+      const a=node('a','Review the unresolved isoform coordinates.');a.className='catalog-entry-link';a.href='#site-numbering';reasons.push(a);
     }
     if(!row.atlas_window || row.atlas_window[0]!==row.residue)reasons.push('The reported residue could not be verified on the Atlas sequence.');
     if(!counts.has('supports position'))reasons.push('No checked peptide uniquely supports this position.');

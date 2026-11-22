@@ -249,6 +249,7 @@
         if(token.length<3 || !words.some(word=>oneEdit(token,word)))continue;
       }
       const a=document.createElement('a');
+      a.className='catalog-entry-link';
       a.href='/atlas/detail/?'+new URLSearchParams({id,site:pos,organism,residue:aa})+'#site-record';
       a.textContent=[row[12],id,(aa||'Position ')+pos,organism].filter(Boolean).join(' · ');
       const li=document.createElement('li');li.append(a);(direct?exact:near).push(li);
