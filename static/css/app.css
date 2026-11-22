@@ -5312,3 +5312,4 @@ html { scroll-padding-top:120px; }
 .catalog-index-links a{padding:.4rem 0;border-bottom:1px solid #d7e2e7}
 .catalog-page dl{display:grid;grid-template-columns:minmax(8rem,1fr) 2fr;max-width:44rem}
 .catalog-page dl>*{padding:.55rem .3rem;margin:0;border-bottom:1px solid #d7e2e7}
+.catalog-entry-link,.catalog-page a{display:inline-block;line-height:1.5}
