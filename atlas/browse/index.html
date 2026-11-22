@@ -25,7 +25,7 @@
   <meta name="twitter:image" content="https://oglcnac.org/static/img/social-card.png?v=e4829d02aa49ae39">
 
 
-  <link rel="stylesheet" href="/static/css/app.css?v=ace5383dc73b2d8d">
+  <link rel="stylesheet" href="/static/css/app.css?v=041c0d69923cac8c">
   <script src="/static/js/site-ui.js?v=c77918483a2ce6ec" defer></script>
 
 </head>
@@ -86,6 +86,7 @@
       Select a species to explore its curated O-GlcNAc protein and site
       records.
     </p>
+    <p><a href="/atlas/catalog/">Protein A–Z and site directory</a></p>
     <div class="atlas-browse-controls">
     <div class="record-actions" aria-label="Browse view"><button type="button" id="browse-records" aria-pressed="true">Species records</button><button type="button" id="browse-sites" aria-pressed="false">Sites</button></div>
     <div class="species-filter" aria-label="Browse by species">
@@ -135,6 +136,7 @@
     <div data-add-results></div><p data-add-status role="status"></p><div class="record-actions" data-chosen></div>
     <button type="button" data-run disabled>Compare selected sites</button> <button type="button" data-share>Copy comparison link</button> <button type="button" data-export hidden>Download comparison CSV</button><p data-missing></p><p role="status"></p>
     <div class="table-scroll" data-output tabindex="0" role="region" aria-label="Cross-protein site evidence"></div></section>
+  <section data-possible hidden><h3>Possible matches</h3><ul></ul></section>
   <p data-status role="status"></p><div class="table-scroll" tabindex="0" role="region" aria-label="Filtered Atlas site directory"><table id="site-directory-table"><thead><tr><th>Accession</th><th>Reported site</th><th>Species</th><th>Matching records</th><th>Studies (distinct PMIDs)</th><th>Site pLDDT</th><th>Confirmed PDB entries</th></tr></thead><tbody></tbody></table></div>
   </div></section>
 <section id="browse-record-results" class="table-results-section" aria-labelledby="atlas-browse-results-heading">
@@ -259,8 +261,8 @@ if(atlasBrowseParams.get("view")!=="sites") loadBrowse(atlasBrowseParams.get("sp
 </script>
 
 <script src="/static/js/record-view.js?v=1574981bf6a1022e"></script>
-<script src="/static/js/atlas-directory-compare.js?v=49fe533d4c81e79f"></script>
-<script src="/static/js/atlas-site-directory.js?v=67837fee7caabe37"></script>
+<script src="/static/js/atlas-directory-compare.js?v=f31feb5d0415a438"></script>
+<script src="/static/js/atlas-site-directory.js?v=81b51deef116186c"></script>
 
 </body>
 </html>

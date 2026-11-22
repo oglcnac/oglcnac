@@ -56,6 +56,18 @@ window.OglcnacSiteRecord = function(root, accession, records) {
     const candidates=row.segment_candidates, confirmed=Object.keys(row.pdb_entries).length;
     find('progress').textContent=candidates==null || !/^[STY]$/.test(row.residue)?'Structure coverage unassessed for this site.':
       confirmed+' confirmed PDB entries · '+row.checked_candidates+' of '+candidates+' candidate entries checked.';
+    const limits=find('limits'), reasons=[];
+    if(numbering.some(item=>item.status==='unresolved')){
+      const a=node('a','Review the unresolved isoform coordinates.');a.href='#site-numbering';reasons.push(a);
+    }
+    if(!row.atlas_window || row.atlas_window[0]!==row.residue)reasons.push('The reported residue could not be verified on the Atlas sequence.');
+    if(!counts.has('supports position'))reasons.push('No checked peptide uniquely supports this position.');
+    else if(counts.size>1)reasons.push('Peptide records give different outcomes at this position.');
+    if(!row.model)reasons.push('Site confidence is unavailable from a sequence-matched AlphaFold model.');
+    if(candidates==null || !/^[STY]$/.test(row.residue))reasons.push('Experimental structure coverage is unassessed.');
+    else if(candidates>row.checked_candidates)reasons.push('Some candidate PDB entries still need residue-level verification.');
+    limits.hidden=!reasons.length;
+    limits.querySelector('ul').replaceChildren(...reasons.map(reason=>{const li=node('li','');li.append(reason);return li;}));
     find('permalink').href=link(row);
   }
   async function load(){

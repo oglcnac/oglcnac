@@ -1,7 +1,7 @@
 window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
   const chosen=new Map(), button=panel.querySelector('[data-run]'), output=panel.querySelector('[data-output]');
   const chips=panel.querySelector('[data-chosen]'),status=panel.querySelector('[role=status]');
-  let revision=0;
+  let revision=0, comparisonData, exportRows=[];
   const make=(tag,text)=>{const el=document.createElement(tag);el.textContent=text;return el;};
   const missing=new Set();
   const download=panel.querySelector('[data-export]');
@@ -16,7 +16,7 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
     catch {status.textContent=location.href;}
   };
   download.onclick=()=>{
-    const rows=[...output.querySelectorAll('tr')].map(row=>[...row.cells].map(cell=>cell.textContent));
+    const rows=exportRows;
     if(!rows.length)return;
     const url=URL.createObjectURL(new Blob([OglcnacTables.rowsToText(rows[0],rows.slice(1),',')],{type:'text/csv;charset=utf-8'}));
     const a=document.createElement('a');a.href=url;a.download='atlas-site-comparison.csv';a.click();
@@ -54,6 +54,14 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
       const records=await OglcnacStaticData.loadAtlasRecordsForAccessions([...new Set(sites.map(s=>s.id))]);
       let context;
       try {context=await comparisonEvidence(sites);} catch {context=new Map();}
+      let extended;
+      try{
+        comparisonData??=fetch('/static/data/atlas-comparison-context.json?v=e70c8370c6a29491').then(response=>{
+          if(!response.ok)throw Error();
+          return response.json();
+        });
+        extended=await comparisonData;
+      }catch{comparisonData=null;}
       if(current!==revision)return;
       const table=document.createElement('table'),head=table.createTHead().insertRow();
       for(const field of ['Site','Source records','Publications','Unambiguous records','Reported methods','Rows with unique peptide support','Phosphorylation at residue','Nearby phosphorylation','Nearby acetylation','Nearby ubiquitination','Parent protein low-throughput OGT-PIN evidence','Observed PDB segment entries','Confirmed PDB entries','Site pLDDT','Mean pLDDT (±5)','Modeled residues in window','AlphaFold model','Peptide outcomes']) head.append(make('th',field));
@@ -83,7 +91,23 @@ window.OglcnacDirectoryCompare = function(panel,comparisonEvidence) {
         tr.insertCell().textContent=review?.model?.join(' v')??'Unassessed';
         tr.insertCell().textContent=review?.peptides.join(' · ')||'Unassessed';
       }
-      output.append(table);download.hidden=false;status.textContent='Complete evidence for the selected sites, in selection order.';
+      const details=document.createElement('details'), extra=document.createElement('table');
+      details.append(make('summary','More evidence'));
+      const extraFields=['Identical ortholog residues','Ortholog species assessed','Physical partners of the protein (BioGRID)'];
+      const header=extra.createTHead().insertRow();
+      for(const field of ['Site',...extraFields])header.append(make('th',field));
+      const extraBody=extra.createTBody();
+      exportRows=[[...head.cells].map(cell=>cell.textContent).concat(extraFields)];
+      sites.forEach((s,i)=>{
+        const values=extended?.[JSON.stringify([s.species,s.id,s.pos,s.aa])]??[null,null,null];
+        const visible=values.map(v=>v??'Unassessed');
+        const tr=extraBody.insertRow();
+        for(const value of [body.rows[i].cells[0].textContent,...visible])tr.insertCell().textContent=value;
+        exportRows.push([...body.rows[i].cells].map(cell=>cell.textContent).concat(visible));
+      });
+      details.append(make('p','Compare identical residues with the number of ortholog species assessed. BioGRID partner counts apply to the protein as a whole.'),extra);
+      output.append(table,details);download.hidden=false;
+      status.textContent=extended?'Evidence for the selected sites, in selection order.':'Additional evidence could not load. Select Compare to retry.';
     }catch{if(current===revision)status.textContent='Evidence unavailable. Select Compare to retry.';}
     finally{if(current===revision)button.disabled=chosen.size<2;}
   };

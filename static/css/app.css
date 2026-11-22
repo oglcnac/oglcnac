@@ -5302,3 +5302,13 @@ html { scroll-padding-top:120px; }
 .residue-picker fieldset{display:flex;flex-wrap:wrap;gap:.5rem 1rem;border:0;padding:.25rem 0;max-width:26rem}
 .residue-picker legend{font-size:.85rem;color:#415e6b}
 #site-directory .residue-picker label{display:inline-flex;flex-direction:row;align-items:center;gap:.35rem}
+.catalog-page{max-width:64rem;overflow-wrap:anywhere}
+.catalog-page nav,.catalog-page h2,.catalog-page dt{margin-top:1rem}
+.catalog-page h1{margin-block:1rem}
+.catalog-page li{margin-block:.5rem}
+.catalog-page dt{font-weight:600}
+.catalog-page dd{margin-inline-start:0}
+.catalog-index-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(8rem,1fr));gap:.25rem 1rem}
+.catalog-index-links a{padding:.4rem 0;border-bottom:1px solid #d7e2e7}
+.catalog-page dl{display:grid;grid-template-columns:minmax(8rem,1fr) 2fr;max-width:44rem}
+.catalog-page dl>*{padding:.55rem .3rem;margin:0;border-bottom:1px solid #d7e2e7}

@@ -160,6 +160,7 @@
       const siteName=/^[A-Z]$/.test(aa)?aa+pos:'Position '+pos+(aa?' (reported: '+aa+')':'');
       return [{text:id,href:link},{text:siteName,render:cell=>compare.cellRenderer(cell,{id,pos,aa,species:organism,name:siteName,link})},speciesName(organism),counts[index-4],counts[index],{text:review?.get(row)[1]??'—',sortNumber:review?.get(row)[1]??null},pdbCount(row)];
     }),{preserveState:true});
+    suggestionRows=matches;showPossible();
     find('status').textContent = matches.length.toLocaleString()+(matches.length===1?' reported site entry.':' reported site entries.')+' Peptide outcomes reflect records meeting the method and assignment filters.';
   }
   function pdbCount(row){
@@ -218,10 +219,49 @@
     if(!root.hidden)render();
   }
   let timer;
+  let suggestionRows=[];
+  function oneEdit(a,b){
+    if(Math.abs(a.length-b.length)>1)return false;
+    let i=0;
+    while(i<a.length && a[i]===b[i])i++;
+    if(a.length!==b.length){
+      const [short,long]=a.length<b.length?[a,b]:[b,a];
+      return short.slice(i)===long.slice(i+1);
+    }
+    if(a.slice(i+1)===b.slice(i+1))return true;
+    return a[i]===b[i+1] && a[i+1]===b[i] && a.slice(i+2)===b.slice(i+2);
+  }
+  function showPossible(){
+    const panel=find('possible'), list=panel.querySelector('ul');
+    list.replaceChildren();panel.hidden=true;
+    if(table.filteredRows.length || !table.filterInput.value.trim())return;
+    const terms=table.filterInput.value.trim().toUpperCase().split(/\s+/);
+    if(terms.length>4 || terms.some(term=>term.length>40))return;
+    const exact=[],near=[];
+    for(const row of suggestionRows){
+      const [organism,id,pos,aa]=row;
+      const words=[id,...String(row[12]||'').split(/[\s/,;]+/),aa+pos,organism].map(word=>word.toUpperCase());
+      const unmatched=terms.filter(t=>!words.includes(t));
+      const direct=unmatched.length===0;
+      if(!direct){
+        if(near.length>=6 || unmatched.length!==1)continue;
+        const token=unmatched[0];
+        if(token.length<3 || !words.some(word=>oneEdit(token,word)))continue;
+      }
+      const a=document.createElement('a');
+      a.href='/atlas/detail/?'+new URLSearchParams({id,site:pos,organism,residue:aa})+'#site-record';
+      a.textContent=[row[12],id,(aa||'Position ')+pos,organism].filter(Boolean).join(' · ');
+      const li=document.createElement('li');li.append(a);(direct?exact:near).push(li);
+      if(exact.length===6)break;
+    }
+    const hits=exact.length?exact:near;
+    if(hits.length){list.append(...hits);panel.hidden=false;}
+  }
   term.addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(context)render();},160);});
   root.addEventListener('change',event=>{if(event.target.closest('.record-actions')&&rows)render();});
   function syncTableSearch(){
     if(!table || root.hidden)return;
+    showPossible();
     const url=new URL(location.href);
     if(table.filterInput.value)url.searchParams.set('q',table.filterInput.value);
     else url.searchParams.delete('q');
